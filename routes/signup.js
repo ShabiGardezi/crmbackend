@@ -16,9 +16,10 @@ router.post("/signup", async (req, res) => {
 
   try {
     const saveduser = await newUser.save();
-    res.status(200).json(saveduser);
-  } catch (err) {
-    res.status(500).json(err);
+    res.status(201).json({ message: "Signup successful", payload: saveduser });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
   }
 });
 

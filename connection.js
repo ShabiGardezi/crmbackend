@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 module.exports = () => {
   mongoose
-    .connect("mongodb+srv://RankBPOCRM:rankorbit123@crm.cxsh9va.mongodb.net/")
+    .connect(process.env.MONGO_URL)
     .then(() => {
       console.log("connected to database");
     })
