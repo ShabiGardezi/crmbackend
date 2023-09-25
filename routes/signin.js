@@ -20,7 +20,7 @@ router.post("/signin", async (req, res) => {
   if (!findUser) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
-  req.session.user = findUser;
+  // req.session.user = findUser;
   res.json({ message: "Login successful", payload: findUser });
 });
 
