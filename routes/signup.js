@@ -3,20 +3,53 @@ const User = require("../schemas/users");
 router.get("/usertest", (req, res) => {
   res.send("user test");
 });
+const checkRole = (req, res, next) => {
+  const userRole = req.session.User.role; // Assuming you store the user's role in the session
+
+  if (userRole !== "admin") {
+    return res
+      .status(403)
+      .json({ message: "Forbidden. Only admin users can add new users." });
+  }
+
+  next();
+};
 
 // ADD USER
-router.post("/signup", async (req, res) => {
-  const newUser = new User({
-    username: req.body.username,
-    password: req.body.password,
-    confirmPassword: req.body.confirmPassword,
-    email: req.body.email,
-    role: req.body.role,
-  });
+// router.post("/signup", checkRole, async (req, res) => {
+//   const newUser = new User({
+//     username: req.body.username,
+//     password: req.body.password,
+//     confirmPassword: req.body.confirmPassword,
+//     email: req.body.email,
+//     role: req.body.role,
+//     department: req.body.department,
+//   });
 
+//   try {
+//     const saveduser = await newUser.save();
+//     res.status(201).json({ message: "Signup successful", payload: saveduser });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error);
+//   }
+// });
+
+router.post("/signup", checkRole, async (req, res) => {
+  // Your existing signup route logic goes here
+  // Only users with admin role can reach this point
   try {
-    const saveduser = await newUser.save();
-    res.status(201).json({ message: "Signup successful", payload: saveduser });
+    const newUser = new User({
+      username: req.body.username,
+      password: req.body.password,
+      confirmPassword: req.body.confirmPassword,
+      email: req.body.email,
+      role: req.body.role,
+      department: req.body.department,
+    });
+
+    const savedUser = await newUser.save();
+    res.status(201).json({ message: "Signup successful", payload: savedUser });
   } catch (error) {
     console.log(error);
     res.status(500).json(error);

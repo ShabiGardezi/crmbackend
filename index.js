@@ -8,7 +8,7 @@ const signinRoute = require("./routes/signin");
 dotenv.config();
 mongoose
   .connect(process.env.MONGO_URL, {
-    dbName: "crmrankbpo", // Specify the database name here
+    dbName: "CRM", // Specify the database name here
   })
   .then(() => console.log("DB connection success"))
   .catch((err) => {
