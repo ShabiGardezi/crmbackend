@@ -1,14 +1,14 @@
 const router = require("express").Router();
 const User = require("../schemas/users");
 
-// // Add the express-session middleware to enable session management
-// router.use(
-//   require("express-session")({
-//     secret: "your-secret-key", // Replace with a secure secret key
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
+// Add the express-session middleware to enable session management
+router.use(
+  require("express-session")({
+    secret: "rankbpo123", // Replace with a secure secret key
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
