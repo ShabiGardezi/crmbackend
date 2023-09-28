@@ -3,17 +3,18 @@ const User = require("../schemas/users");
 router.get("/usertest", (req, res) => {
   res.send("user test");
 });
-const checkRole = (req, res, next) => {
-  const userRole = req.session.User.role; // Assuming you store the user's role in the session
 
-  if (userRole !== "admin") {
-    return res
-      .status(403)
-      .json({ message: "Forbidden. Only admin users can add new users." });
-  }
+// const checkRole = (req, res, next) => {
+//   const userRole = req.session.User.role; // Assuming you store the user's role in the session
 
-  next();
-};
+//   if (userRole !== "admin") {
+//     return res
+//       .status(403)
+//       .json({ message: "Forbidden. Only admin users can add new users." });
+//   }
+
+//   next();
+// };
 
 // ADD USER
 // router.post("/signup", checkRole, async (req, res) => {
@@ -35,7 +36,7 @@ const checkRole = (req, res, next) => {
 //   }
 // });
 
-router.post("/signup", checkRole, async (req, res) => {
+router.post("/signup", async (req, res) => {
   // Your existing signup route logic goes here
   // Only users with admin role can reach this point
   try {

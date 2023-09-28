@@ -26,6 +26,15 @@ app.use(
   })
 );
 
+// Add the express-session middleware before defining your routes
+app.use(
+  require("express-session")({
+    secret: "rankbpo123", // Replace with a secure secret key
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
 //API
 app.use("/api/user", signupRoute);
 app.use("/api/user", signinRoute);
