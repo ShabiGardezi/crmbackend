@@ -1,21 +1,13 @@
 const router = require("express").Router();
 const User = require("../schemas/users");
 
-// Add the express-session middleware to enable session management
-router.use(
-  require("express-session")({
-    secret: "rankbpo123", // Replace with a secure secret key
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   const findUser = await User.findOne(
     { email: email, password: password },
     "-password"
-  );
+  ).populate("department", "name");
 
   if (!findUser) {
     return res.status(401).json({ message: "Invalid credentials" });

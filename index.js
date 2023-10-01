@@ -4,6 +4,8 @@ const { default: mongoose } = require("mongoose");
 const dotenv = require("dotenv");
 const signupRoute = require("./routes/signup");
 const signinRoute = require("./routes/signin");
+const departmentsRoute = require("./routes/departments");
+const ticketRoute = require("./routes/ticket");
 
 dotenv.config();
 mongoose
@@ -26,18 +28,11 @@ app.use(
   })
 );
 
-// Add the express-session middleware before defining your routes
-app.use(
-  require("express-session")({
-    secret: "rankbpo123", // Replace with a secure secret key
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
 //API
 app.use("/api/user", signupRoute);
 app.use("/api/user", signinRoute);
+app.use("/api/departments", departmentsRoute);
+app.use("/api/tickets", ticketRoute);
 
 const port = 5000;
 app.listen(port, () => {
