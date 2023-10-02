@@ -1,6 +1,14 @@
 const router = require("express").Router();
 const User = require("../schemas/users");
+const session = require("express-session");
 
+router.use(
+  session({
+    secret: "your-secret-key", // Replace with a secret key for session management
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -12,13 +20,14 @@ router.post("/signin", async (req, res) => {
   if (!findUser) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
-  req.session.user = findUser;
+  // req.session.user = findUser;
   res.json({ message: "Login successful", payload: findUser });
 });
 
 router.post("/logout", (req, res) => {
   // Clear the user's session
-  req.session.destroy((err) => {
+  const session = req.session; // Initialize the session
+  session.destroy((err) => {
     if (err) {
       return res.status(500).json({ message: "Logout failed" });
     }
