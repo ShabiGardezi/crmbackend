@@ -7,8 +7,18 @@ const TicketSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  dueDate: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   majorAssignee: {
     type: mongoose.Types.ObjectId,
+    ref: "department",
+    required: true,
+  },
+  assignor: {
+    type: mongoose.Types.ObjectId, //this requires the name of user who assigned the ticket
     ref: "department",
     required: true,
   },
@@ -16,6 +26,11 @@ const TicketSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: "Not Started Yet",
+  },
+  priority: {
+    type: String,
+    required: true,
+    default: "Moderate",
   },
 });
 module.exports = mongoose.model("ticket", TicketSchema);
