@@ -1,0 +1,231 @@
+{
+  "Local SEO / GMB Optimization": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {
+      "clientName": "",
+      "street": "",
+      "WebsiteURL": "",
+      "country": "",
+      "state": "",
+      "zipcode": "",
+      "businessNumber": "",
+      "clientEmail": "",
+      "businessHours": "",
+      "socialProfile": "",
+      "gmbUrl": "",
+      "workStatus": "",
+      "notes": ""
+    }
+  },
+  "Wordpress Development": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {
+      "clientName": "",
+      "WebsiteURL": "",
+      "country": "",
+      "state": "",
+      "street": "",
+      "zipcode": "",
+      "businessNumber": "",
+      "clientEmail": "",
+      "ReferralWebsite": "",
+      "notes": ""
+    }
+  },
+  "Website SEO": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {
+      "clientName": "",
+      "street": "",
+      "Keywords": "",
+      "WebsiteURL": "",
+      "country": "",
+      "state": "",
+      "zipcode": "",
+      "businessNumber": "",
+      "clientEmail": "",
+      "businessHours": "",
+      "socialProfile": "",
+      "gmbUrl": "",
+      "workStatus": "",
+      "notes": "",
+      "monthlyBlogsRequirement": "",
+      "LoginCredentials": "",
+      "SearchConsoleAccess": "",
+      "GoogleAnalyticsAccess": ""
+    }
+  },
+  "Custom Development": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {
+      "clientName": "",
+      "WebsiteURL": "",
+      "country": "",
+      "state": "",
+      "street": "",
+      "zipcode": "",
+      "businessNumber": "",
+      "clientEmail": "",
+      "ReferralWebsite": "",
+      "notes": ""
+    }
+  },
+  "Paid Marketing": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {
+      "adAccountAccess": "",
+      "dailyBudget": "",
+      "location": "",
+      "website": "",
+      "notes": ""
+    }
+  },
+  "Social Media Management": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {
+      "clientName": "",
+      "street": "",
+      "WebsiteURL": "",
+      "country": "",
+      "state": "",
+      "zipcode": "",
+      "businessNumber": "",
+      "clientEmail": "",
+      "businessHours": "",
+      "socialProfile": "",
+      "gmbUrl": "",
+      "workStatus": "",
+      "SocialMediaAccounts": "",
+      "PageAdminAccess": "",
+      "LikesFollowers": "",
+      "notes": ""
+    }
+  },
+  "Customer Reviews Management": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {
+      "clientName": "",
+      "street": "",
+      "WebsiteURL": "",
+      "country": "",
+      "state": "",
+      "zipcode": "",
+      "businessNumber": "",
+      "clientEmail": "",
+      "businessHours": "",
+      "socialProfile": "",
+      "gmbUrl": "",
+      "workStatus": "",
+      "CodeMails": "",
+      "notes": ""
+    }
+  },
+  "Sales": {
+    "quotation": {
+      "price": "",
+      "advanceprice": ""
+    },
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "services": {
+      "keywords": "",
+      "webUrl": "",
+      "loginCredentials": ""
+    },
+    "businessDetails": {}
+  }
+}
