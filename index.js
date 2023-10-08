@@ -6,6 +6,7 @@ const signupRoute = require("./routes/signup");
 const signinRoute = require("./routes/signin");
 const departmentsRoute = require("./routes/departments");
 const ticketRoute = require("./routes/ticket");
+const notesRoute = require("./routes/notes");
 
 dotenv.config();
 mongoose
@@ -33,6 +34,7 @@ app.use("/api/user", signupRoute);
 app.use("/api/user", signinRoute);
 app.use("/api/departments", departmentsRoute);
 app.use("/api/tickets", ticketRoute);
+app.use("/api/notes", notesRoute);
 
 const port = 5000;
 app.listen(port, () => {

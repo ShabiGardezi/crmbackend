@@ -3,16 +3,28 @@ const Ticket = require("../schemas/tickets");
 
 router.post("/", async (req, res) => {
   // create ticket
-  const { data, created_by, majorAssignee, status } = req.body;
-
-  if (!created_by || !majorAssignee || !data || !status)
-    return res.status(500).json({ payload: "", message: "Payload Missing" });
-
-  const newTicket = new Ticket({
-    data,
+  const {
     created_by,
     majorAssignee,
     status,
+    dueDate,
+    businessdetails,
+    Services,
+    quotation,
+    TicketDetails,
+  } = req.body;
+
+  if (!created_by || !majorAssignee || !status || !dueDate)
+    return res.status(500).json({ payload: "", message: "Payload Missing" });
+
+  const newTicket = new Ticket({
+    created_by,
+    majorAssignee,
+    status,
+    businessdetails,
+    Services,
+    quotation,
+    TicketDetails,
   });
 
   const ticket = await newTicket.save();
@@ -21,15 +33,19 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  // get tickets
-
-  const tickets = await Ticket.find({});
+  // get tickets by department
+  const { departmentId } = req.params;
+  const tickets = await Ticket.find({ majorAssignee: departmentId });
 
   return res.status(200).json({ payload: tickets, message: "tickets fetched" });
 });
 
 router.get("/completed-count", async (req, res) => {
-  const ticketsCount = await Ticket.find({ status: "COMPLETED" }).count();
+  const { departmentId } = req.params;
+  const ticketsCount = await Ticket.find({
+    majorAssignee: departmentId,
+    status: "COMPLETED",
+  }).count();
 
   return res
     .status(200)
@@ -37,7 +53,12 @@ router.get("/completed-count", async (req, res) => {
 });
 
 router.get("/notStarted-count", async (req, res) => {
-  const ticketsCount = await Ticket.find({ status: "Not Started Yet" }).count();
+  const { departmentId } = req.params;
+
+  const ticketsCount = await Ticket.find({
+    majorAssignee: departmentId,
+    status: "Not Started Yet",
+  }).count();
 
   return res
     .status(200)

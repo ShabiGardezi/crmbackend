@@ -1,27 +1,21 @@
 const mongoose = require("mongoose");
 
 const TicketSchema = new mongoose.Schema({
-  data: {},
   created_by: {
     type: mongoose.Types.ObjectId,
     ref: "User",
     required: true,
   },
   dueDate: {
-    type: mongoose.Types.ObjectId,
-    ref: "User",
+    type: Date,
     required: true,
   },
   majorAssignee: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "department",
     required: true,
   },
-  assignor: {
-    type: mongoose.Types.ObjectId, //this requires the name of user who assigned the ticket
-    ref: "department",
-    required: true,
-  },
+
   status: {
     type: String,
     required: true,
@@ -32,5 +26,9 @@ const TicketSchema = new mongoose.Schema({
     required: true,
     default: "Moderate",
   },
+  businessdetails: {},
+  Services: {},
+  quotation: {},
+  TicketDetails: {},
 });
 module.exports = mongoose.model("ticket", TicketSchema);

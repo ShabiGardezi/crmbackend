@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   department: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "department",
     required: true,
   },
