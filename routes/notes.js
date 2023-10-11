@@ -4,7 +4,7 @@ const Notes = require("../schemas/notes");
 router.get("/", async (req, res) => {
   // get notes
   try {
-    const { userId } = req.params;
+    const { userId } = req.query;
     const notes = await Notes.find({ user_id: userId });
 
     return res.status(200).json({ payload: notes, message: "notes fetched" });
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
 router.delete("/", async (req, res) => {
   // delete a  note
   try {
-    const { noteId } = req.params;
+    const { noteId } = req.query;
     const deletedNote = await Notes.findByIdAndDelete(noteId);
     if (!deletedNote)
       return res
@@ -60,7 +60,7 @@ router.delete("/", async (req, res) => {
 router.delete("/all", async (req, res) => {
   // delete all notes of a user
   try {
-    const { userId } = req.params;
+    const { userId } = req.query;
     await Notes.deleteMany({ user_id: userId });
 
     return res.status(200).json({ payload: "", message: "notes deleted" });
