@@ -16,6 +16,11 @@ const TicketSchema = new mongoose.Schema({
     required: true,
   },
 
+  assignorDepartment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "department",
+    required: true,
+  },
   status: {
     type: String,
     required: true,

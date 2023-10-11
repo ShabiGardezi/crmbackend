@@ -6,6 +6,7 @@ router.post("/", async (req, res) => {
   const {
     created_by,
     majorAssignee,
+    assignorDepartment,
     dueDate,
     businessdetails,
     Services,
@@ -13,7 +14,7 @@ router.post("/", async (req, res) => {
     TicketDetails,
   } = req.body;
 
-  if (!created_by || !majorAssignee || !dueDate)
+  if (!created_by || !majorAssignee || !dueDate || !assignorDepartment)
     return res.status(500).json({ payload: "", message: "Payload Missing" });
 
   const newTicket = new Ticket({
@@ -24,6 +25,7 @@ router.post("/", async (req, res) => {
     Services,
     quotation,
     TicketDetails,
+    assignorDepartment,
   });
 
   const ticket = await newTicket.save();
