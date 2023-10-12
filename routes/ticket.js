@@ -33,12 +33,31 @@ router.post("/", async (req, res) => {
   return res.status(200).json({ payload: ticket, message: "ticket created" });
 });
 
+// Define the route for getting tickets by department
 router.get("/", async (req, res) => {
-  // get tickets by department
-  const { departmentId } = req.query;
-  const tickets = await Ticket.find({ majorAssignee: departmentId });
+  try {
+    // Get the departmentId from the query parameters
+    const { departmentId } = req.query;
 
-  return res.status(200).json({ payload: tickets, message: "tickets fetched" });
+    // Find tickets with majorAssignee matching the departmentId
+    const tickets = await Ticket.find({ majorAssignee: departmentId })
+      .populate("majorAssignee", "name") // Populate majorAssignee with the department name
+      .populate("assignorDepartment", "name"); // Populate assignorDepartment with the department name
+
+    // Check if there are any tickets, and return them as a response
+    if (tickets && tickets.length > 0) {
+      return res
+        .status(200)
+        .json({ payload: tickets, message: "Tickets fetched" });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No tickets found for the specified department" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 router.get("/all", async (req, res) => {

@@ -26,11 +26,11 @@ const TicketSchema = new mongoose.Schema({
     required: true,
     default: "Not Started Yet",
   },
-  priority: {
-    type: String,
-    required: true,
-    default: "Moderate",
-  },
+  // priority: {
+  //   type: String,
+  //   required: true,
+  //   default: "Moderate",
+  // },
   businessdetails: {},
   Services: {},
   quotation: {},
