@@ -41,8 +41,35 @@ router.get("/", async (req, res) => {
 
     // Find tickets with majorAssignee matching the departmentId
     const tickets = await Ticket.find({ majorAssignee: departmentId })
-      .populate("majorAssignee", "name") // Populate majorAssignee with the department name
-      .populate("assignorDepartment", "name"); // Populate assignorDepartment with the department name
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+    // Check if there are any tickets, and return them as a response
+    if (tickets && tickets.length > 0) {
+      return res
+        .status(200)
+        .json({ payload: tickets, message: "Tickets fetched" });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No tickets found for the specified department" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Define the route for getting tickets assigned by individual department
+
+router.get("/created", async (req, res) => {
+  try {
+    // Get the departmentId from the query parameters
+    const { departmentId } = req.query;
+
+    // Find tickets with assignorDepartment matching the departmentId
+    const tickets = await Ticket.find({ assignorDepartment: departmentId })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
 
     // Check if there are any tickets, and return them as a response
     if (tickets && tickets.length > 0) {
@@ -54,6 +81,44 @@ router.get("/", async (req, res) => {
         .status(404)
         .json({ message: "No tickets found for the specified department" });
     }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/created-count", async (req, res) => {
+  const { departmentId } = req.query;
+
+  try {
+    // Find tickets with assignorDepartment matching the departmentId
+    const createdTickets = await Ticket.find({
+      assignorDepartment: departmentId,
+    }).count();
+
+    return res.status(200).json({
+      payload: createdTickets,
+      message: "Count of created tickets",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/assigned-count", async (req, res) => {
+  const { departmentId } = req.query;
+
+  try {
+    // Find tickets with majorAssignee matching the departmentId
+    const assignedTickets = await Ticket.find({
+      majorAssignee: departmentId,
+    }).count();
+
+    return res.status(200).json({
+      payload: assignedTickets,
+      message: "Count of assigned tickets",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -87,7 +152,6 @@ router.get("/notStarted-count", async (req, res) => {
     majorAssignee: departmentId,
     status: "Not Started Yet",
   }).count();
-
   return res
     .status(200)
     .json({ payload: ticketsCount, message: "tickets notSarted Yet count" });
