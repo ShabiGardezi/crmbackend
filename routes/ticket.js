@@ -150,11 +150,46 @@ router.get("/notStarted-count", async (req, res) => {
 
   const ticketsCount = await Ticket.find({
     majorAssignee: departmentId,
-    status: "Not Started Yet",
+    status: { $ne: "COMPLETED" },
   }).count();
   return res
     .status(200)
     .json({ payload: ticketsCount, message: "tickets notSarted Yet count" });
+});
+
+router.put("/status-update", async (req, res) => {
+  try {
+    const { ticketId, status } = req.body;
+
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        $set: { status: status },
+      },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .json({ payload: updated, message: "status updated" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server Error" });
+  }
+});
+
+router.get("/client-search", async (req, res) => {
+  try {
+    const { searchString } = req.query;
+
+    const respone = await Ticket.find({
+      "businessdetails.clientName": { $regex: searchString, $options: "i" },
+    });
+
+    return res
+      .status(200)
+      .json({ payload: respone, message: "status updated" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server Error" });
+  }
 });
 
 module.exports = router;
