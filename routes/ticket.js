@@ -137,7 +137,7 @@ router.get("/completed-count", async (req, res) => {
   const { departmentId } = req.query;
   const ticketsCount = await Ticket.find({
     majorAssignee: departmentId,
-    status: "COMPLETED",
+    status: "Completed",
   }).count();
 
   return res
@@ -150,11 +150,53 @@ router.get("/notStarted-count", async (req, res) => {
 
   const ticketsCount = await Ticket.find({
     majorAssignee: departmentId,
-    status: { $ne: "COMPLETED" },
+    status: { $ne: "Completed" },
   }).count();
   return res
     .status(200)
     .json({ payload: ticketsCount, message: "tickets notSarted Yet count" });
+});
+//API TO SHOW COMPLETED TITCKETS
+router.get("/completed", async (req, res) => {
+  const { departmentId } = req.query;
+
+  try {
+    const completedTickets = await Ticket.find({
+      majorAssignee: departmentId,
+      status: "Completed",
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+
+    return res
+      .status(200)
+      .json({ payload: completedTickets, message: "Completed tickets" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching completed tickets" });
+  }
+});
+
+//API TO SHOW NOT-COMPLETED TITCKETS
+
+router.get("/notStarted", async (req, res) => {
+  const { departmentId } = req.query;
+  try {
+    const notStartedTickets = await Ticket.find({
+      majorAssignee: departmentId,
+      status: { $ne: "Completed" },
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+    return res
+      .status(200)
+      .json({ payload: notStartedTickets, message: "Not Started Yet tickets" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching Not Started Yet tickets" });
+  }
 });
 
 router.put("/status-update", async (req, res) => {
