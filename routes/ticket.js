@@ -224,13 +224,38 @@ router.get("/client-search", async (req, res) => {
 
     const respone = await Ticket.find({
       "businessdetails.clientName": { $regex: searchString, $options: "i" },
-    });
+    })
 
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
     return res
       .status(200)
       .json({ payload: respone, message: "status updated" });
   } catch (error) {
     return res.status(500).json({ message: "Internal server Error" });
+  }
+});
+router.get("/:ticketId", async (req, res) => {
+  try {
+    // Get the ticketId from the route parameters
+    const { ticketId } = req.params;
+
+    // Find the ticket by its ID
+    const ticket = await Ticket.findById(ticketId)
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+
+    // Check if the ticket exists and return it as a response
+    if (ticket) {
+      return res
+        .status(200)
+        .json({ payload: ticket, message: "Ticket details fetched" });
+    } else {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 
