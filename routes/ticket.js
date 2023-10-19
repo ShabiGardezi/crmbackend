@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Ticket = require("../schemas/tickets");
 
+//API TO CREATE TICKET
 router.post("/", async (req, res) => {
   // create ticket
   const {
@@ -86,6 +87,7 @@ router.get("/created", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+//API TO GET TICKETS CREATED COUNT
 
 router.get("/created-count", async (req, res) => {
   const { departmentId } = req.query;
@@ -105,7 +107,7 @@ router.get("/created-count", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
+//API TO GET TICKETS ASSIGNED COUNT
 router.get("/assigned-count", async (req, res) => {
   const { departmentId } = req.query;
 
@@ -124,7 +126,7 @@ router.get("/assigned-count", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
+//API TO GET ALL TICKETS
 router.get("/all", async (req, res) => {
   // get all tickets
 
@@ -132,6 +134,7 @@ router.get("/all", async (req, res) => {
 
   return res.status(200).json({ payload: tickets, message: "tickets fetched" });
 });
+//API TO GET CLOSE TICKETS COUNT
 
 router.get("/completed-count", async (req, res) => {
   const { departmentId } = req.query;
@@ -144,7 +147,7 @@ router.get("/completed-count", async (req, res) => {
     .status(200)
     .json({ payload: ticketsCount, message: "tickets completed count" });
 });
-
+//API TO GET OPEN TICKETS COUNT
 router.get("/notStarted-count", async (req, res) => {
   const { departmentId } = req.query;
 
@@ -198,7 +201,7 @@ router.get("/notStarted", async (req, res) => {
       .json({ message: "Error fetching Not Started Yet tickets" });
   }
 });
-
+//API TO UPDATE TICKET STATUS
 router.put("/status-update", async (req, res) => {
   try {
     const { ticketId, status } = req.body;
@@ -217,7 +220,7 @@ router.put("/status-update", async (req, res) => {
     return res.status(500).json({ message: "Internal server Error" });
   }
 });
-
+//API TO SEARCH CLIENT BY CLIENT-NAME
 router.get("/client-search", async (req, res) => {
   try {
     const { searchString } = req.query;
@@ -235,6 +238,8 @@ router.get("/client-search", async (req, res) => {
     return res.status(500).json({ message: "Internal server Error" });
   }
 });
+
+//Get individual ticket details
 router.get("/:ticketId", async (req, res) => {
   try {
     // Get the ticketId from the route parameters
@@ -255,6 +260,56 @@ router.get("/:ticketId", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//API TO UPDATE REPORTING DATE
+router.put("/reportingDate-update", async (req, res) => {
+  try {
+    const { ticketId, reportingDate } = req.body;
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        $set: { reportingDate: reportingDate },
+      },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ payload: updated, message: "reportingDate updated" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server Error" });
+  }
+});
+
+// Add this route to retrieve reporting dates for all tickets
+// API to retrieve reporting date for a ticket
+router.get("/reporting-date/:ticketId", async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+
+    // Find the ticket by its ID
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    const reportingDate = ticket.reportingDate;
+
+    if (!reportingDate) {
+      return res
+        .status(404)
+        .json({ message: "Reporting date not available for this ticket" });
+    }
+
+    return res
+      .status(200)
+      .json({ payload: reportingDate, message: "Reporting date retrieved" });
+  } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
 });

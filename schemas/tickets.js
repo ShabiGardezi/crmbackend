@@ -26,11 +26,20 @@ const TicketSchema = new mongoose.Schema({
     required: true,
     default: "Not Started Yet",
   },
-  // priority: {
-  //   type: String,
-  //   required: true,
-  //   default: "Moderate",
-  // },
+  createdAt: {
+    type: Date, // Use the Date data type for createdAt
+    default: Date.now, // Set the default value to the current date and time
+  },
+  reportingDate: {
+    type: Date,
+    // Set the default value to one month later than createdAt
+    default: function () {
+      const oneMonthLater = new Date();
+      oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+      return oneMonthLater;
+    },
+  },
+
   businessdetails: {},
   Services: {},
   quotation: {},
