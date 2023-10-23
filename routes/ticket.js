@@ -313,4 +313,24 @@ router.get("/reporting-date/:ticketId", async (req, res) => {
   }
 });
 
+router.put("/active-status/update", async (req, res) => {
+  try {
+    const { ticketId, status } = req.body;
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        $set: { ActiveNotActive: status },
+      },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ payload: updated, message: "status updated" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server Error" });
+  }
+});
+
 module.exports = router;
