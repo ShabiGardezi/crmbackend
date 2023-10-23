@@ -330,29 +330,40 @@ router.get("/reporting-date/:ticketId", async (req, res) => {
   }
 });
 
-// Create an API route to update notes for a specific ticket
-router.put("/notes-update", async (req, res) => {
+router.put("/active-status/update", async (req, res) => {
   try {
-    const { ticketId, notes } = req.body;
-
-    // Use Mongoose to find and update the specific ticket by its ID
+    const { ticketId, status } = req.body;
     const updated = await Ticket.findByIdAndUpdate(
       ticketId,
       {
-        $set: { "businessdetails.notes": notes },
+        $set: { ActiveNotActive: status },
       },
       { new: true }
     );
 
-    if (!updated) {
-      // If the ticket is not found, return an error
-      return res.status(404).json({ message: "Ticket not found" });
-    }
-
-    return res.status(200).json({ payload: updated, message: "Notes updated" });
+    return res
+      .status(200)
+      .json({ payload: updated, message: "status updated" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.log(error);
+    return res.status(500).json({ message: "Internal server Error" });
+  }
+});
+
+router.get("/active-nonactive-clients", async (req, res) => {
+  try {
+    const { departmentId, status } = req.query;
+    const response = await Ticket.find({
+      ActiveNotActive: status,
+      majorAssignee: departmentId,
+    });
+
+    return res
+      .status(200)
+      .json({ payload: response, message: "fetched tickets" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server Error" });
   }
 });
 
