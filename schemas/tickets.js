@@ -30,6 +30,10 @@ const TicketSchema = new mongoose.Schema({
     type: Date, // Use the Date data type for createdAt
     default: Date.now, // Set the default value to the current date and time
   },
+  ActiveNotActive: {
+    type: String, // Use the Date data type for createdAt
+    default: "Active", // Set the default value to the current date and time
+  },
   reportingDate: {
     type: Date,
     // Set the default value to one month later than createdAt

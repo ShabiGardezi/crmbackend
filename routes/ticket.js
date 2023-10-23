@@ -285,7 +285,6 @@ router.put("/reportingDate-update", async (req, res) => {
   }
 });
 
-// Add this route to retrieve reporting dates for all tickets
 // API to retrieve reporting date for a ticket
 router.get("/reporting-date/:ticketId", async (req, res) => {
   try {
