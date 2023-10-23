@@ -313,4 +313,30 @@ router.get("/reporting-date/:ticketId", async (req, res) => {
   }
 });
 
+// Create an API route to update notes for a specific ticket
+router.put("/notes-update", async (req, res) => {
+  try {
+    const { ticketId, notes } = req.body;
+
+    // Use Mongoose to find and update the specific ticket by its ID
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        $set: { "businessdetails.notes": notes },
+      },
+      { new: true }
+    );
+
+    if (!updated) {
+      // If the ticket is not found, return an error
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    return res.status(200).json({ payload: updated, message: "Notes updated" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
