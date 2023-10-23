@@ -352,13 +352,12 @@ router.put("/active-status/update", async (req, res) => {
   }
 });
 
-router.get("/activeee", async (req, res) => {
+router.get("/active-nonactive-clients", async (req, res) => {
   try {
     const { departmentId, status } = req.query;
-    console.log("departmentId", departmentId);
     const response = await Ticket.find({
       ActiveNotActive: status,
-      majorAssignee: mongoose.types.objectId(departmentId),
+      majorAssignee: departmentId,
     });
 
     return res
@@ -368,7 +367,7 @@ router.get("/activeee", async (req, res) => {
     console.log(error);
     return res.status(500).json({ message: "Internal server Error" });
   }
-}); //
+});
 // Create an API route to update notes for a specific ticket
 router.put("/notes-update", async (req, res) => {
   try {
