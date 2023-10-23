@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { default: mongoose } = require("mongoose");
 const Ticket = require("../schemas/tickets");
 
 //API TO CREATE TICKET
@@ -41,9 +42,10 @@ router.get("/", async (req, res) => {
     const { departmentId } = req.query;
 
     // Find tickets with majorAssignee matching the departmentId
-    const tickets = await Ticket.find({ majorAssignee: departmentId })
-      .populate("majorAssignee", "name")
-      .populate("assignorDepartment", "name");
+    const tickets = await Ticket.find({ majorAssignee: departmentId }).populate(
+      "assignorDepartment",
+      "name"
+    );
     // Check if there are any tickets, and return them as a response
     if (tickets && tickets.length > 0) {
       return res
@@ -350,12 +352,13 @@ router.put("/active-status/update", async (req, res) => {
   }
 });
 
-router.get("/active-nonactive-clients", async (req, res) => {
+router.get("/activeee", async (req, res) => {
   try {
     const { departmentId, status } = req.query;
+    console.log("departmentId", departmentId);
     const response = await Ticket.find({
       ActiveNotActive: status,
-      majorAssignee: departmentId,
+      majorAssignee: mongoose.types.objectId(departmentId),
     });
 
     return res
@@ -365,7 +368,7 @@ router.get("/active-nonactive-clients", async (req, res) => {
     console.log(error);
     return res.status(500).json({ message: "Internal server Error" });
   }
-});
+}); //
 // Create an API route to update notes for a specific ticket
 router.put("/notes-update", async (req, res) => {
   try {
