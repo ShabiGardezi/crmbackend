@@ -239,6 +239,23 @@ router.get("/client-search", async (req, res) => {
   }
 });
 
+router.get("/active-nonactive-clients", async (req, res) => {
+  try {
+    const { departmentId, status } = req.query;
+    const response = await Ticket.find({
+      ActiveNotActive: status,
+      majorAssignee: departmentId,
+    });
+
+    return res
+      .status(200)
+      .json({ payload: response, message: "fetched tickets" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server Error" });
+  }
+});
+
 //Get individual ticket details
 router.get("/:ticketId", async (req, res) => {
   try {
@@ -336,23 +353,6 @@ router.put("/notes-update", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-router.get("/active-nonactive-clients", async (req, res) => {
-  try {
-    const { departmentId, status } = req.query;
-    const response = await Ticket.find({
-      ActiveNotActive: status,
-      majorAssignee: departmentId,
-    });
-
-    return res
-      .status(200)
-      .json({ payload: response, message: "fetched tickets" });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Internal server Error" });
   }
 });
 
