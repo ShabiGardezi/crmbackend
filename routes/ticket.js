@@ -42,10 +42,9 @@ router.get("/", async (req, res) => {
     const { departmentId } = req.query;
 
     // Find tickets with majorAssignee matching the departmentId
-    const tickets = await Ticket.find({ majorAssignee: departmentId }).populate(
-      "assignorDepartment",
-      "name"
-    );
+    const tickets = await Ticket.find({ majorAssignee: departmentId })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
     // Check if there are any tickets, and return them as a response
     if (tickets && tickets.length > 0) {
       return res
@@ -266,8 +265,8 @@ router.get("/:ticketId", async (req, res) => {
 
     // Find the ticket by its ID
     const ticket = await Ticket.findById(ticketId)
-      .populate("majorAssignee", "name")
-      .populate("assignorDepartment", "name");
+      .populate("assignorDepartment", "name")
+      .populate("majorAssignee", "name");
 
     // Check if the ticket exists and return it as a response
     if (ticket) {
