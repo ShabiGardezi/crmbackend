@@ -7,7 +7,7 @@ const signinRoute = require("./routes/signin");
 const departmentsRoute = require("./routes/departments");
 const ticketRoute = require("./routes/ticket");
 const notesRoute = require("./routes/notes");
-const clientNamesRoute = require("./routes/clientNames"); // Replace with the actual path
+const clientRoute = require("./routes/clientNames"); // Replace with the actual path
 
 dotenv.config();
 mongoose
@@ -36,7 +36,7 @@ app.use("/api/user", signinRoute);
 app.use("/api/departments", departmentsRoute);
 app.use("/api/tickets", ticketRoute);
 app.use("/api/notes", notesRoute);
-app.use("/api/clientName", clientNamesRoute);
+app.use("/api/client", clientRoute);
 
 const port = 5000;
 app.listen(port, () => {
