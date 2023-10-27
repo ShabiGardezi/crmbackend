@@ -10,6 +10,9 @@ const ClientSchema = new mongoose.Schema({
   clientName: {
     type: String,
   },
+  clientEmail: {
+    type: String,
+  },
   state: {
     type: String,
   },
@@ -26,6 +29,15 @@ const ClientSchema = new mongoose.Schema({
     type: String,
   },
   socialProfile: {
+    type: String,
+  },
+  gmbUrl: {
+    type: String,
+  },
+  workStatus: {
+    type: String,
+  },
+  WebsiteURL: {
     type: String,
   },
 });
