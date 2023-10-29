@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { default: mongoose } = require("mongoose");
 const Ticket = require("../schemas/tickets");
+const Client = require("../schemas/clients");
 
 //API TO CREATE TICKET
 router.post("/", async (req, res) => {
@@ -18,6 +19,29 @@ router.post("/", async (req, res) => {
 
   if (!created_by || !majorAssignee || !dueDate || !assignorDepartment)
     return res.status(500).json({ payload: "", message: "Payload Missing" });
+
+  const client = await Client.findOne({
+    clientName: businessdetails.clientName,
+  });
+  if (!client) {
+    // create a new client
+    const newClient = new Client({
+      businessHours: businessdetails.businessHours,
+      businessNumber: businessdetails.businessNumber,
+      clientName: businessdetails.clientName,
+      clientEmail: businessdetails.clientEmail,
+      state: businessdetails.state,
+      city: "",
+      country: businessdetails.country,
+      street: businessdetails.street,
+      zipcode: businessdetails.zipcode,
+      socialProfile: businessdetails.socialProfile,
+      gmbUrl: businessdetails.gmbUrl,
+      workStatus: businessdetails.workStatus,
+      WebsiteURL: businessdetails.WebsiteURL,
+    });
+    await newClient.save();
+  }
 
   const newTicket = new Ticket({
     created_by,
