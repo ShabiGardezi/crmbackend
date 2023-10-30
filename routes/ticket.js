@@ -84,6 +84,61 @@ router.get("/", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+// Define a new route to get tickets with workStatus "Monthly SEO"
+// router.get("/tickets-except-monthly-seo", async (req, res) => {
+//   try {
+//     // Query the database to find tickets with workStatus other than "Monthly-SEO"
+//     const ticketsExceptMonthlySeo = await Ticket.find({
+//       "businessdetails.workStatus": { $ne: "Monthly-SEO" },
+//     });
+
+//     // Check if there are any matching tickets and return them as a response
+//     if (ticketsExceptMonthlySeo && ticketsExceptMonthlySeo.length > 0) {
+//       return res.status(200).json({
+//         payload: ticketsExceptMonthlySeo,
+//         message: "Tickets except Monthly SEO fetched",
+//       });
+//     } else {
+//       return res.status(404).json({
+//         message: "No tickets except Monthly SEO found",
+//       });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+// });
+router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
+  try {
+    const majorAssignee = req.params.majorAssignee;
+
+    // Query the database to find tickets with workStatus other than "Monthly-SEO" and assigned to the specified majorAssignee
+    const ticketsExceptMonthlySeo = await Ticket.find({
+      "businessdetails.workStatus": { $ne: "Monthly-SEO" },
+      majorAssignee: "65195c8f504d80e8f11b0d15" ,
+    });
+
+    // Check if there are any matching tickets and return them as a response
+    if (ticketsExceptMonthlySeo && ticketsExceptMonthlySeo.length > 0) {
+      return res.status(200).json({
+        payload: ticketsExceptMonthlySeo,
+        message: "Tickets except Monthly SEO assigned to majorAssignee fetched",
+      });
+    } else {
+      return res.status(404).json({
+        message:
+          "No tickets except Monthly SEO assigned to majorAssignee found",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
 
 // Define the route for getting tickets assigned by individual department
 
@@ -416,4 +471,5 @@ router.put("/notes-update", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 module.exports = router;
