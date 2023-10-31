@@ -85,31 +85,7 @@ router.get("/", async (req, res) => {
   }
 });
 // Define a new route to get tickets with workStatus "Monthly SEO"
-// router.get("/tickets-except-monthly-seo", async (req, res) => {
-//   try {
-//     // Query the database to find tickets with workStatus other than "Monthly-SEO"
-//     const ticketsExceptMonthlySeo = await Ticket.find({
-//       "businessdetails.workStatus": { $ne: "Monthly-SEO" },
-//     });
 
-//     // Check if there are any matching tickets and return them as a response
-//     if (ticketsExceptMonthlySeo && ticketsExceptMonthlySeo.length > 0) {
-//       return res.status(200).json({
-//         payload: ticketsExceptMonthlySeo,
-//         message: "Tickets except Monthly SEO fetched",
-//       });
-//     } else {
-//       return res.status(404).json({
-//         message: "No tickets except Monthly SEO found",
-//       });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       message: "Internal server error",
-//     });
-//   }
-// });
 router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
   try {
     const majorAssignee = req.params.majorAssignee;
@@ -117,7 +93,7 @@ router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
     // Query the database to find tickets with workStatus other than "Monthly-SEO" and assigned to the specified majorAssignee
     const ticketsExceptMonthlySeo = await Ticket.find({
       "businessdetails.workStatus": { $ne: "Monthly-SEO" },
-      majorAssignee: "65195c8f504d80e8f11b0d15" ,
+      majorAssignee: "65195c8f504d80e8f11b0d15",
     });
 
     // Check if there are any matching tickets and return them as a response
@@ -130,6 +106,81 @@ router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
       return res.status(404).json({
         message:
           "No tickets except Monthly SEO assigned to majorAssignee found",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
+router.get(
+  "/tickets-count-except-monthly-seo/:majorAssignee",
+  async (req, res) => {
+    try {
+      const majorAssignee = req.params.majorAssignee;
+
+      // Query the database to find the count of tickets with workStatus other than "Monthly-SEO" and assigned to the specified majorAssignee
+      const countOfTicketsExceptMonthlySeo = await Ticket.countDocuments({
+        "businessdetails.workStatus": { $ne: "Monthly-SEO" },
+        majorAssignee: "65195c8f504d80e8f11b0d15",
+      });
+
+      // Return the count as a response
+      return res.status(200).json({
+        count: countOfTicketsExceptMonthlySeo,
+        message:
+          "Count of tickets except Monthly SEO assigned to majorAssignee fetched",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  }
+);
+
+// Define a route to count tickets with workStatus 'Monthly-SEO'
+router.get("/tickets-count-monthly-seo", async (req, res) => {
+  try {
+    // Query the database to find the count of tickets with workStatus "Monthly-SEO"
+    const countOfMonthlySeoTickets = await Ticket.countDocuments({
+      "businessdetails.workStatus": "Monthly-SEO",
+    });
+
+    // Return the count as a response
+    return res.status(200).json({
+      count: countOfMonthlySeoTickets,
+      message: "Count of Monthly-SEO tickets fetched",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
+// Define a route to get tickets with workStatus Monthly-SEO
+router.get("/monthly-seo-tickets", async (req, res) => {
+  try {
+    // Query the database to find tickets with workStatus "Monthly-SEO"
+    const monthlySeoTickets = await Ticket.find({
+      "businessdetails.workStatus": "Monthly-SEO",
+    });
+
+    // Check if there are any matching tickets and return them as a response
+    if (monthlySeoTickets && monthlySeoTickets.length > 0) {
+      return res.status(200).json({
+        payload: monthlySeoTickets,
+        message: "Tickets with workStatus Monthly-SEO fetched",
+      });
+    } else {
+      return res.status(404).json({
+        message: "No tickets with workStatus Monthly-SEO found",
       });
     }
   } catch (error) {
