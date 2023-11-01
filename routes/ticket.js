@@ -32,6 +32,7 @@ router.post("/", async (req, res) => {
       clientEmail: businessdetails.clientEmail,
       state: businessdetails.state,
       city: "",
+      facebookURL: businessdetails.facebookURL,
       country: businessdetails.country,
       street: businessdetails.street,
       zipcode: businessdetails.zipcode,
@@ -39,6 +40,7 @@ router.post("/", async (req, res) => {
       gmbUrl: businessdetails.gmbUrl,
       workStatus: businessdetails.workStatus,
       WebsiteURL: businessdetails.WebsiteURL,
+      noOfreviews: businessdetails.noOfreviews,
     });
     await newClient.save();
   }

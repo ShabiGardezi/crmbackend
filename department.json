@@ -148,7 +148,8 @@
   "Social Media Management": {
     "quotation": {
       "price": "",
-      "advanceprice": ""
+      "advanceprice": "",
+      "remainingPrice": ""
     },
     "ticketdetails": {
       "priorityLevel": "",
@@ -162,21 +163,15 @@
     },
     "businessDetails": {
       "clientName": "",
-      "street": "",
       "WebsiteURL": "",
-      "country": "",
-      "state": "",
-      "zipcode": "",
-      "businessNumber": "",
       "clientEmail": "",
-      "businessHours": "",
       "socialProfile": "",
       "gmbUrl": "",
-      "workStatus": "",
-      "SocialMediaAccounts": "",
-      "PageAdminAccess": "",
-      "LikesFollowers": "",
-      "notes": ""
+      "facebookURL": "",
+      "noOfreviewsGMB": "",
+      "logincredentials": "",
+      "notes": "",
+      "noOfreviews": ""
     }
   },
   "Customer Reviews Management": {
@@ -191,24 +186,19 @@
     },
     "services": {
       "keywords": "",
-      "webUrl": "",
-      "loginCredentials": ""
+      "webUrl": ""
     },
     "businessDetails": {
       "clientName": "",
-      "street": "",
       "WebsiteURL": "",
-      "country": "",
-      "state": "",
-      "zipcode": "",
-      "businessNumber": "",
       "clientEmail": "",
-      "businessHours": "",
       "socialProfile": "",
       "gmbUrl": "",
-      "workStatus": "",
-      "CodeMails": "",
-      "notes": ""
+      "facebookURL": "",
+      "noOfreviewsGMB": "",
+      "logincredentials": "",
+      "notes": "",
+      "noOfreviews": ""
     }
   },
   "Sales": {

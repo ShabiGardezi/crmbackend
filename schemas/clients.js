@@ -40,5 +40,14 @@ const ClientSchema = new mongoose.Schema({
   WebsiteURL: {
     type: String,
   },
+  facebookURL: {
+    type: String,
+  },
+  noOfreviewsGMB: {
+    type: String,
+  },
+  noOfreviews: {
+    type: String,
+  },
 });
 module.exports = mongoose.model("client", ClientSchema);
