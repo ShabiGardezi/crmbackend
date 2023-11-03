@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
       gmbUrl: businessdetails.gmbUrl,
       workStatus: businessdetails.workStatus,
       WebsiteURL: businessdetails.WebsiteURL,
-      noOfreviews: businessdetails.noOfreviews,
+      noOfFbreviews: businessdetails.noOfFbreviews,
     });
     await newClient.save();
   }

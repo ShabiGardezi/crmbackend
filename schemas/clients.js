@@ -46,7 +46,7 @@ const ClientSchema = new mongoose.Schema({
   noOfreviewsGMB: {
     type: String,
   },
-  noOfreviews: {
+  noOfFbreviews: {
     type: String,
   },
 });

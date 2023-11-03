@@ -171,7 +171,8 @@
       "noOfreviewsGMB": "",
       "logincredentials": "",
       "notes": "",
-      "noOfreviews": ""
+      "noOfFbreviews": "",
+      "LikesFollowers": ""
     }
   },
   "Customer Reviews Management": {
@@ -198,7 +199,7 @@
       "noOfreviewsGMB": "",
       "logincredentials": "",
       "notes": "",
-      "noOfreviews": ""
+      "noOfFbreviews": ""
     }
   },
   "Sales": {
