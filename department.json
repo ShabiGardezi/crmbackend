@@ -139,13 +139,15 @@
     },
     "businessDetails": {
       "adAccountAccess": "",
-      "dailyBudget": "",
+      "budget": "",
       "location": "",
       "website": "",
-      "notes": ""
+      "notes": "",
+      "selectedBudget": "",
+      "platform": ""
     }
   },
-  "Social Media Management": {
+  "Social Media / Customer Reviews Management": {
     "quotation": {
       "price": "",
       "advanceprice": "",
@@ -173,33 +175,6 @@
       "notes": "",
       "noOfFbreviews": "",
       "LikesFollowers": ""
-    }
-  },
-  "Customer Reviews Management": {
-    "quotation": {
-      "price": "",
-      "advanceprice": ""
-    },
-    "ticketdetails": {
-      "priorityLevel": "",
-      "assignor": "",
-      "dueDate": ""
-    },
-    "services": {
-      "keywords": "",
-      "webUrl": ""
-    },
-    "businessDetails": {
-      "clientName": "",
-      "WebsiteURL": "",
-      "clientEmail": "",
-      "socialProfile": "",
-      "gmbUrl": "",
-      "facebookURL": "",
-      "noOfreviewsGMB": "",
-      "logincredentials": "",
-      "notes": "",
-      "noOfFbreviews": ""
     }
   },
   "Sales": {
