@@ -125,7 +125,8 @@
   "Paid Marketing": {
     "quotation": {
       "price": "",
-      "advanceprice": ""
+      "advanceprice": "",
+      "remainingPrice": ""
     },
     "ticketdetails": {
       "priorityLevel": "",
@@ -133,18 +134,19 @@
       "dueDate": ""
     },
     "services": {
-      "keywords": "",
-      "webUrl": "",
       "loginCredentials": ""
     },
     "businessDetails": {
+      "clientName": "",
+      "clientEmail": "",
+      "location": "",
       "adAccountAccess": "",
       "budget": "",
-      "location": "",
-      "website": "",
-      "notes": "",
       "selectedBudget": "",
-      "platform": ""
+      "platform": "",
+      "selectedPlatform": "",
+      "WebsiteURL": "",
+      "notes": ""
     }
   },
   "Social Media / Customer Reviews Management": {

@@ -40,6 +40,9 @@ const ClientSchema = new mongoose.Schema({
   WebsiteURL: {
     type: String,
   },
+  ownerName: {
+    type: String,
+  },
   facebookURL: {
     type: String,
   },
@@ -47,6 +50,9 @@ const ClientSchema = new mongoose.Schema({
     type: String,
   },
   noOfFbreviews: {
+    type: String,
+  },
+  ownerName: {
     type: String,
   },
 });
