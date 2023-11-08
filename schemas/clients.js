@@ -40,6 +40,9 @@ const ClientSchema = new mongoose.Schema({
   WebsiteURL: {
     type: String,
   },
+  ReferralWebsite: {
+    type: String,
+  },
   ownerName: {
     type: String,
   },

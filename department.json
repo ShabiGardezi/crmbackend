@@ -179,6 +179,26 @@
       "LikesFollowers": ""
     }
   },
+  "Writers": {
+    "ticketdetails": {
+      "priorityLevel": "",
+      "assignor": "",
+      "dueDate": ""
+    },
+    "businessDetails": {
+      "serviceName": "",
+      "serviceAreas": "",
+      "clientName": "",
+      "ownerName": "",
+      "Keywords": "",
+      "WebsiteURL": "",
+      "clientEmail": "",
+      "workStatus": "",
+      "notes": "",
+      "ReferralWebsite": "",
+      "departmentName": ""
+    }
+  },
   "Sales": {
     "quotation": {
       "price": "",
