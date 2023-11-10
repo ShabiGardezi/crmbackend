@@ -19,7 +19,10 @@ router.post("/", async (req, res) => {
 
   if (!created_by || !majorAssignee || !dueDate || !assignorDepartment)
     return res.status(500).json({ payload: "", message: "Payload Missing" });
-
+  let created_by_sales_department = false;
+  if (assignorDepartment === "653fcae0b825ef1379dd5ad5") {
+    created_by_sales_department = true;
+  }
   const client = await Client.findOne({
     clientName: businessdetails.clientName,
   });
@@ -42,6 +45,7 @@ router.post("/", async (req, res) => {
       WebsiteURL: businessdetails.WebsiteURL,
       ReferralWebsite: businessdetails.ReferralWebsite,
       noOfFbreviews: businessdetails.noOfFbreviews,
+      created_by_sales_department,
     });
     await newClient.save();
   }
@@ -66,11 +70,14 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     // Get the departmentId from the query parameters
-    const { departmentId } = req.query;
-    console.log(departmentId);
+    const { departmentId, salesDep } = req.query;
     // Find tickets with majorAssignee matching the departmentId
+    let flag = false;
+    if (salesDep === "true") flag = true;
+
     const tickets = await Ticket.find({
       majorAssignee: new mongoose.Types.ObjectId(departmentId),
+      created_by_sales_department: flag,
     })
       .populate("majorAssignee", "name")
       .populate("assignorDepartment", "name");

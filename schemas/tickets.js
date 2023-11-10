@@ -43,6 +43,11 @@ const TicketSchema = new mongoose.Schema({
       return oneMonthLater;
     },
   },
+  created_by_sales_department: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 
   businessdetails: {},
   Services: {},
