@@ -67,9 +67,11 @@ router.get("/", async (req, res) => {
   try {
     // Get the departmentId from the query parameters
     const { departmentId } = req.query;
-
+    console.log(departmentId);
     // Find tickets with majorAssignee matching the departmentId
-    const tickets = await Ticket.find({ majorAssignee: departmentId })
+    const tickets = await Ticket.find({
+      majorAssignee: new mongoose.Types.ObjectId(departmentId),
+    })
       .populate("majorAssignee", "name")
       .populate("assignorDepartment", "name");
     // Check if there are any tickets, and return them as a response
