@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ payload: "", message: "something went wronge" });
+      .json({ payload: "", message: "something went wrong" });
   }
 });
 
@@ -27,13 +27,13 @@ router.post("/", async (req, res) => {
     if (!savedNote)
       return res
         .status(500)
-        .json({ payload: "", message: "something went wronge" });
+        .json({ payload: "", message: "something went wrong" });
 
     return res.status(200).json({ payload: savedNote, message: "note saved" });
   } catch (error) {
     return res
       .status(500)
-      .json({ payload: "", message: "something went wronge" });
+      .json({ payload: "", message: "something went wrong" });
   }
 });
 
@@ -45,7 +45,7 @@ router.delete("/", async (req, res) => {
     if (!deletedNote)
       return res
         .status(500)
-        .json({ payload: "", message: "something went wronge" });
+        .json({ payload: "", message: "something went wrong" });
 
     return res
       .status(200)
@@ -53,7 +53,7 @@ router.delete("/", async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ payload: "", message: "something went wronge" });
+      .json({ payload: "", message: "something went wrong" });
   }
 });
 
@@ -67,7 +67,7 @@ router.delete("/all", async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ payload: "", message: "something went wronge" });
+      .json({ payload: "", message: "something went wrong" });
   }
 });
 
