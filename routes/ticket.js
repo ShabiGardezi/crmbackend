@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
   if (!created_by || !majorAssignee || !dueDate || !assignorDepartment)
     return res.status(500).json({ payload: "", message: "Payload Missing" });
   let created_by_sales_department = false;
-  if (assignorDepartment === "653fcae0b825ef1379dd5ad5") {
+  if (assignorDepartment === "651b3409819ff0aec6af1387") {
     created_by_sales_department = true;
   }
   const client = await Client.findOne({
@@ -45,7 +45,6 @@ router.post("/", async (req, res) => {
       WebsiteURL: businessdetails.WebsiteURL,
       ReferralWebsite: businessdetails.ReferralWebsite,
       noOfFbreviews: businessdetails.noOfFbreviews,
-      created_by_sales_department,
     });
     await newClient.save();
   }
@@ -59,6 +58,7 @@ router.post("/", async (req, res) => {
     quotation,
     TicketDetails,
     assignorDepartment,
+    created_by_sales_department,
   });
 
   const ticket = await newTicket.save();
