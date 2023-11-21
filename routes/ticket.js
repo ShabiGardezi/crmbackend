@@ -62,7 +62,6 @@ router.post("/", async (req, res) => {
   });
 
   const ticket = await newTicket.save();
-
   return res.status(200).json({ payload: ticket, message: "ticket created" });
 });
 
@@ -100,14 +99,16 @@ router.get("/", async (req, res) => {
 
 router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
   try {
-    const majorAssignee = req.params.majorAssignee;
+    // const { salesDep } = req.query;
+    // let flag = false;
+    // if (salesDep === "true") flag = true;
 
     // Query the database to find tickets with workStatus other than "Monthly-SEO" and assigned to the specified majorAssignee
     const ticketsExceptMonthlySeo = await Ticket.find({
       "businessdetails.workStatus": { $ne: "Monthly-SEO" },
       majorAssignee: "65195c8f504d80e8f11b0d15",
+      created_by_sales_department: true,
     });
-
     // Check if there are any matching tickets and return them as a response
     if (ticketsExceptMonthlySeo && ticketsExceptMonthlySeo.length > 0) {
       return res.status(200).json({
@@ -132,12 +133,14 @@ router.get(
   "/tickets-count-except-monthly-seo/:majorAssignee",
   async (req, res) => {
     try {
-      const majorAssignee = req.params.majorAssignee;
-
+      const { salesDep } = req.query;
+      let flag = false;
+      if (salesDep === "true") flag = true;
       // Query the database to find the count of tickets with workStatus other than "Monthly-SEO" and assigned to the specified majorAssignee
       const countOfTicketsExceptMonthlySeo = await Ticket.countDocuments({
         "businessdetails.workStatus": { $ne: "Monthly-SEO" },
         majorAssignee: "65195c8f504d80e8f11b0d15",
+        created_by_sales_department: true,
       });
 
       // Return the count as a response
@@ -161,6 +164,7 @@ router.get("/tickets-count-monthly-seo", async (req, res) => {
     // Query the database to find the count of tickets with workStatus "Monthly-SEO"
     const countOfMonthlySeoTickets = await Ticket.countDocuments({
       "businessdetails.workStatus": "Monthly-SEO",
+      created_by_sales_department: true,
     });
 
     // Return the count as a response
@@ -182,6 +186,7 @@ router.get("/monthly-seo-tickets", async (req, res) => {
     // Query the database to find tickets with workStatus "Monthly-SEO"
     const monthlySeoTickets = await Ticket.find({
       "businessdetails.workStatus": "Monthly-SEO",
+      created_by_sales_department: true,
     });
 
     // Check if there are any matching tickets and return them as a response
@@ -258,6 +263,7 @@ router.get("/assigned-count", async (req, res) => {
     // Find tickets with majorAssignee matching the departmentId
     const assignedTickets = await Ticket.find({
       majorAssignee: departmentId,
+      status: { $ne: "Completed" },
     }).count();
 
     return res.status(200).json({
