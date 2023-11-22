@@ -34,7 +34,6 @@ router.post("/", async (req, res) => {
       clientName: businessdetails.clientName,
       clientEmail: businessdetails.clientEmail,
       state: businessdetails.state,
-      city: "",
       facebookURL: businessdetails.facebookURL,
       country: businessdetails.country,
       street: businessdetails.street,
@@ -209,7 +208,6 @@ router.get("/monthly-seo-tickets", async (req, res) => {
 });
 
 // Define the route for getting tickets assigned by individual department
-
 router.get("/created", async (req, res) => {
   try {
     // Get the departmentId from the query parameters
