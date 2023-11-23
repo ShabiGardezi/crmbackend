@@ -53,5 +53,6 @@ const TicketSchema = new mongoose.Schema({
   Services: {},
   quotation: {},
   TicketDetails: {},
+  payment_history: [],
 });
 module.exports = mongoose.model("ticket", TicketSchema);

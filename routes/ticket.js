@@ -15,6 +15,7 @@ router.post("/", async (req, res) => {
     Services,
     quotation,
     TicketDetails,
+    payment_history,
   } = req.body;
 
   if (!created_by || !majorAssignee || !dueDate || !assignorDepartment)
@@ -58,10 +59,33 @@ router.post("/", async (req, res) => {
     TicketDetails,
     assignorDepartment,
     created_by_sales_department,
+    payment_history: [{ date: new Date(), payment: payment_history }],
   });
 
   const ticket = await newTicket.save();
   return res.status(200).json({ payload: ticket, message: "ticket created" });
+});
+
+router.post("/update_payment_history", async (req, res) => {
+  try {
+    const { payment, ticketId } = req.body;
+    console.log(ticketId);
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        $push: {
+          payment_history: { date: new Date(), payment: parseInt(payment) },
+        },
+      },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .json({ payload: updated, message: "payment history updated" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 // Define the route for getting tickets by department
