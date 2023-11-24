@@ -11,7 +11,7 @@ const clientRoute = require("./routes/clientNames"); // Replace with the actual 
 
 dotenv.config();
 mongoose
-  .connect(process.env.MONGO_URL, {
+  .connect("mongodb+srv://rankbpo:rankbpo123@crmrankbpo.ae4ccof.mongodb.net/", {
     dbName: "CRM", // Specify the database name here
   })
   .then(() => console.log("DB connection success"))
