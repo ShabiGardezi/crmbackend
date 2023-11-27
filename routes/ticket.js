@@ -69,12 +69,11 @@ router.post("/", async (req, res) => {
 router.post("/update_payment_history", async (req, res) => {
   try {
     const { payment, ticketId } = req.body;
-    console.log(ticketId);
     const updated = await Ticket.findByIdAndUpdate(
       ticketId,
       {
         $push: {
-          payment_history: { date: new Date(), payment: parseInt(payment) },
+          payment_history: { date: new Date(), payment: parseFloat(payment) },
         },
       },
       { new: true }
