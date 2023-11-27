@@ -372,6 +372,72 @@ router.get("/notStarted", async (req, res) => {
       .json({ message: "Error fetching Not Started Yet tickets" });
   }
 });
+//API TO GET SALES OPEN TICKETS
+router.get("/openTickets", async (req, res) => {
+  const { departmentId } = req.query;
+  try {
+    const notStartedTickets = await Ticket.find({
+      assignorDepartment: departmentId,
+      status: { $ne: "Completed" },
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+    return res
+      .status(200)
+      .json({ payload: notStartedTickets, message: "Not Started Yet tickets" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching Not Started Yet tickets" });
+  }
+});
+//API TO GET SALES OPEN TICKETS COUNT
+
+router.get("/openTickets-count", async (req, res) => {
+  const { departmentId } = req.query;
+
+  const ticketsCount = await Ticket.find({
+    assignorDepartment: departmentId,
+    status: { $ne: "Completed" },
+  }).count();
+  return res
+    .status(200)
+    .json({ payload: ticketsCount, message: "tickets notSarted Yet count" });
+});
+//API TO SHOW COMPLETED TITCKETS SALES
+router.get("/completedTickets", async (req, res) => {
+  const { departmentId } = req.query;
+
+  try {
+    const completedTickets = await Ticket.find({
+      assignorDepartment: departmentId,
+      status: "Completed",
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+
+    return res
+      .status(200)
+      .json({ payload: completedTickets, message: "Completed tickets" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching completed tickets" });
+  }
+});
+//API TO GET SALES CLOSE TICKETS COUNT
+
+router.get("/completedTickets-count", async (req, res) => {
+  const { departmentId } = req.query;
+
+  const ticketsCount = await Ticket.find({
+    assignorDepartment: departmentId,
+    status: "Completed",
+  }).count();
+  return res
+    .status(200)
+    .json({ payload: ticketsCount, message: "tickets notSarted Yet count" });
+});
 //API TO UPDATE TICKET STATUS
 router.put("/status-update", async (req, res) => {
   try {
