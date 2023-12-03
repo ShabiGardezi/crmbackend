@@ -71,4 +71,25 @@ router.delete("/all", async (req, res) => {
   }
 });
 
+router.patch("/", async (req, res) => {
+  try {
+    const { noteId } = req.query;
+    const { note } = req.body;
+    const response = await Notes.findOneAndUpdate(
+      { _id: noteId },
+      { $set: { note } }
+    );
+    if (!response)
+      return res
+        .status(500)
+        .json({ payload: "", message: "something went wrong" });
+
+    return res.status(200).json({ payload: "", message: "notes updated" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ payload: "", message: "something went wrong" });
+  }
+});
+
 module.exports = router;
