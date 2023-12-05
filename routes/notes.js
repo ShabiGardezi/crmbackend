@@ -18,10 +18,12 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   // create a new note
   try {
-    const { userId, note } = req.body;
+    const { userId, note, status, date } = req.body;
     const newNote = new Notes({
       user_id: userId,
       note: note,
+      status: status,
+      date: date,
     });
     const savedNote = await newNote.save();
     if (!savedNote)
@@ -34,6 +36,28 @@ router.post("/", async (req, res) => {
     return res
       .status(500)
       .json({ payload: "", message: "something went wrong" });
+  }
+});
+
+router.put("/update", async (req, res) => {
+  const { id } = req.body;
+  try {
+    const note = await Notes.findById(id);
+    if (!note) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+
+    // Toggle the status between true and false
+    const updatedNote = await Notes.findByIdAndUpdate(
+      id,
+      { status: !note.status },
+      { new: true }
+    );
+
+    res.json(updatedNote);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
