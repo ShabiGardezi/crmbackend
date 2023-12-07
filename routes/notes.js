@@ -84,8 +84,8 @@ router.delete("/", async (req, res) => {
 router.delete("/all", async (req, res) => {
   // delete all notes of a user
   try {
-    const { userId } = req.query;
-    await Notes.deleteMany({ user_id: userId });
+    const { userId, status } = req.query;
+    await Notes.deleteMany({ user_id: userId, status: status });
 
     return res.status(200).json({ payload: "", message: "notes deleted" });
   } catch (error) {
@@ -94,7 +94,6 @@ router.delete("/all", async (req, res) => {
       .json({ payload: "", message: "something went wrong" });
   }
 });
-
 router.patch("/", async (req, res) => {
   try {
     const { noteId } = req.query;
