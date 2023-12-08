@@ -7,6 +7,10 @@ const NotificationSchema = new mongoose.Schema({
     user_name: {
         type: String,
     },
+    client_name: {
+        type: String,
+        default: "",
+    },
     dueDate: {
         type: String,
         required: true,
@@ -17,12 +21,19 @@ const NotificationSchema = new mongoose.Schema({
     majorAssigneeId: {
         type: String,
     },
+    assignorDepartmentId:{
+        type:String,
+    },
     assignorDepartment: {
         type: String,
     },
     createdAt: {
         type: Date, // Use the Date data type for createdAt
         default: ()=> new Date()
+    },
+    isRead: {
+        type: Boolean,
+        default: () => false
     },
 });
 module.exports = mongoose.model("notification", NotificationSchema);
