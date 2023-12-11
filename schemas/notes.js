@@ -22,6 +22,10 @@ const NotesSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  seen: {
+    type: Boolean,
+    default: false,
+  },
   date: {
     type: String, // Save the date as a string
     default: formatDate(new Date()), // Set the default value to the current formatted date
