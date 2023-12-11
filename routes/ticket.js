@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { default: mongoose } = require("mongoose");
 const Ticket = require("../schemas/tickets");
 const Client = require("../schemas/clients");
-
+const Notifications = require("../schemas/notification");
 //API TO CREATE TICKET
 router.post("/", async (req, res) => {
   // create ticket
@@ -607,7 +607,7 @@ router.get("/active-nonactive-clients", async (req, res) => {
 // Create an API route to update notes for a specific ticket
 router.put("/notes-update", async (req, res) => {
   try {
-    const { ticketId, notes } = req.body;
+    const { ticketId, notes, departmentId, departmentName } = req.body;
 
     // Use Mongoose to find and update the specific ticket by its ID
     const updated = await Ticket.findByIdAndUpdate(
@@ -621,6 +621,24 @@ router.put("/notes-update", async (req, res) => {
     if (!updated) {
       // If the ticket is not found, return an error
       return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    if (departmentId === updated.majorAssignee.toString()) {
+      const newNotification = new Notifications({
+        ticket_Id: ticketId,
+        majorAssigneeId: updated.assignorDepartment,
+        assignorDepartment: departmentName,
+        assignorDepartmentId: departmentId,
+      });
+      await newNotification.save();
+    } else if (departmentId === updated.assignorDepartment.toString()) {
+      const newNotification = new Notifications({
+        ticket_Id: ticketId,
+        majorAssigneeId: updated.majorAssignee,
+        assignorDepartment: departmentName,
+        assignorDepartmentId: updated.assignorDepartment,
+      });
+      await newNotification.save();
     }
 
     return res.status(200).json({ payload: updated, message: "Notes updated" });

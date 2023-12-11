@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Notes = require("../schemas/notes");
+const Notifications = require("../schemas/notification");
 
 router.get("/", async (req, res) => {
   // get notes

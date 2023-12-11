@@ -6,20 +6,24 @@ const NotificationSchema = new mongoose.Schema({
   },
   user_Id: {
     type: String,
+    required: false,
   },
   user_name: {
     type: String,
+    required: false,
   },
   client_name: {
     type: String,
     default: "",
+    required: false,
   },
   dueDate: {
     type: String,
-    required: true,
+    required: false,
   },
   majorAssignee: {
     type: String,
+    required: false,
   },
   majorAssigneeId: {
     type: String,
@@ -29,6 +33,7 @@ const NotificationSchema = new mongoose.Schema({
   },
   assignorDepartment: {
     type: String,
+    required: false,
   },
   createdAt: {
     type: Date, // Use the Date data type for createdAt
