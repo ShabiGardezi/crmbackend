@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
     });
 
     const ticket = await newTicket.save();
-    return res.status(200).json({payload: ticket, message: "ticket created"});
+    return res.status(200).json({payload:{ _id: ticket._id}, message: "ticket created"});
 });
 
 router.post("/update_payment_history", async (req, res) => {

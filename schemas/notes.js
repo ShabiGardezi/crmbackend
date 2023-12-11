@@ -13,6 +13,14 @@ const NotesSchema = new mongoose.Schema({
     status: {
         type: Boolean,
         default: true,
+    },
+    date: {
+        type: String,
+        default: "",
+    },
+    seen: {
+        type: Boolean,
+        default: false
     }
 });
 module.exports = mongoose.model("note", NotesSchema);

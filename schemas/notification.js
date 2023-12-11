@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const NotificationSchema = new mongoose.Schema({
+    ticket_Id:{
+        type:String,
+    },
     user_Id : {
         type: String,
     },
@@ -35,5 +38,10 @@ const NotificationSchema = new mongoose.Schema({
         type: Boolean,
         default: () => false
     },
+    reportingDate:{
+        type: Boolean,
+        default: false,
+    },
+
 });
 module.exports = mongoose.model("notification", NotificationSchema);
