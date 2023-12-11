@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   const { id, status } = req.body;
-  console.log("Received noteID:", id);
+  // console.log("Received noteID:", id);
   try {
     const updatedNote = await Notes.findByIdAndUpdate(
       id,
@@ -94,9 +94,8 @@ router.delete("/", async (req, res) => {
 router.delete("/all", async (req, res) => {
   // delete all notes of a user
   try {
-    const { userId } = req.query;
-    await Notes.deleteMany({ user_id: userId });
-
+    const { userId, status } = req.query;
+    await Notes.deleteMany({ user_id: userId, status: status });
     return res.status(200).json({ payload: "", message: "notes deleted" });
   } catch (error) {
     return res
@@ -105,4 +104,23 @@ router.delete("/all", async (req, res) => {
   }
 });
 
+router.patch("/", async (req, res) => {
+  try {
+    const { noteId } = req.query;
+    const { note } = req.body;
+    const response = await Notes.findOneAndUpdate(
+      { _id: noteId },
+      { $set: { note } }
+    );
+    if (!response)
+      return res
+        .status(500)
+        .json({ payload: "", message: "something went wrong" });
+    return res.status(200).json({ payload: "", message: "notes updated" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ payload: "", message: "something went wrong" });
+  }
+});
 module.exports = router;
