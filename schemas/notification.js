@@ -47,5 +47,8 @@ const NotificationSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  notes: {
+    type: String,
+  },
 });
 module.exports = mongoose.model("notification", NotificationSchema);

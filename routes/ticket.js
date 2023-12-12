@@ -623,23 +623,23 @@ router.put("/notes-update", async (req, res) => {
       return res.status(404).json({ message: "Ticket not found" });
     }
 
-    if (departmentId === updated.majorAssignee.toString()) {
-      const newNotification = new Notifications({
-        ticket_Id: ticketId,
-        majorAssigneeId: updated.assignorDepartment,
-        assignorDepartment: departmentName,
-        assignorDepartmentId: departmentId,
-      });
-      await newNotification.save();
-    } else if (departmentId === updated.assignorDepartment.toString()) {
-      const newNotification = new Notifications({
-        ticket_Id: ticketId,
-        majorAssigneeId: updated.majorAssignee,
-        assignorDepartment: departmentName,
-        assignorDepartmentId: updated.assignorDepartment,
-      });
-      await newNotification.save();
-    }
+    // if (departmentId === updated.majorAssignee.toString()) {
+    //   const newNotification = new Notifications({
+    //     ticket_Id: ticketId,
+    //     majorAssigneeId: updated.assignorDepartment,
+    //     assignorDepartment: departmentName,
+    //     assignorDepartmentId: departmentId,
+    //   });
+    //   await newNotification.save();
+    // } else if (departmentId === updated.assignorDepartment.toString()) {
+    //   const newNotification = new Notifications({
+    //     ticket_Id: ticketId,
+    //     majorAssigneeId: updated.majorAssignee,
+    //     assignorDepartment: departmentName,
+    //     assignorDepartmentId: updated.assignorDepartment,
+    //   });
+    //   await newNotification.save();
+    // }
 
     return res.status(200).json({ payload: updated, message: "Notes updated" });
   } catch (error) {

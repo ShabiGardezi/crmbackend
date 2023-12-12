@@ -3,7 +3,7 @@ const Notifications = require("../schemas/notification");
 const Departments = require("../schemas/departments");
 const User = require("../schemas/users");
 const Notes = require("../schemas/notes");
-
+const Tickets = require("../schemas/tickets");
 const markRead = async (userDepartment) => {
   try {
     await Notifications.updateMany(
@@ -66,7 +66,11 @@ router.post("/", async (req, res) => {
     const userName = user.username;
     const assignorDepartmentName = assignorDepartment.name;
     const majorAssigneeName = majorAssignee.name;
-
+    const ticket = await Tickets.findById(ticketId);
+    const notes =
+      ticket && ticket.businessdetails && ticket.businessdetails.notes
+        ? ticket.businessdetails.notes
+        : null;
     const newNotification = new Notifications({
       ticket_Id: ticketId,
       user_Id: userId,
@@ -77,7 +81,9 @@ router.post("/", async (req, res) => {
       dueDate: dueDate,
       majorAssigneeId: majorAssigneeId,
       client_name: clientName,
+      notes: notes,
     });
+
     const savedNotification = await newNotification.save();
     if (!savedNotification)
       return res
