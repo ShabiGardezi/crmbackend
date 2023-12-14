@@ -647,6 +647,34 @@ router.put("/notes-update", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+// API to retrieve notes for a ticket
+router.get("/notes/:ticketId", async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+
+    // Find the ticket by its ID
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    const notes = ticket.businessdetails.notes;
+
+    if (!notes) {
+      return res
+        .status(404)
+        .json({ message: "Notes not available for this ticket" });
+    }
+
+    return res
+      .status(200)
+      .json({ payload: notes, message: "Notes retrieved successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 // Create an API route to update remaining price for a specific ticket
 router.put("/remaining-update", async (req, res) => {
   try {
