@@ -119,8 +119,40 @@ router.get("/", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-// Define a new route to get tickets with workStatus "Monthly SEO"
 
+// Define the route for getting tickets by department assignor and assignee for home notification
+router.get("/reportingdate-notification", async (req, res) => {
+  try {
+    const { userDepartmentId, salesDep } = req.query;
+    let flag = false;
+    if (salesDep === "true") flag = true;
+
+    const tickets = await Ticket.find({
+      $or: [
+        { majorAssignee: new mongoose.Types.ObjectId(userDepartmentId) },
+        { assignorDepartment: new mongoose.Types.ObjectId(userDepartmentId) },
+      ],
+      created_by_sales_department: flag,
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+
+    if (tickets && tickets.length > 0) {
+      return res
+        .status(200)
+        .json({ payload: tickets, message: "Tickets fetched" });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No tickets found for the specified department" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Define a new route to get tickets with workStatus "Monthly SEO"
 router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
   try {
     // const { salesDep } = req.query;
