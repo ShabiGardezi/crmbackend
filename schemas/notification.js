@@ -50,5 +50,13 @@ const NotificationSchema = new mongoose.Schema({
   notes: {
     type: String,
   },
+  message: {
+    type: String,
+    required: false,
+  },
+  forInBox: {
+    type: Boolean,
+    default: true,
+  },
 });
 module.exports = mongoose.model("notification", NotificationSchema);
