@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Notes = require("../schemas/notes");
+const Notifications = require("../schemas/notification");
 
 router.get("/", async (req, res) => {
   // get notes
@@ -18,10 +19,12 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   // create a new note
   try {
-    const { userId, note } = req.body;
+    const { userId, note, status, date } = req.body;
     const newNote = new Notes({
       user_id: userId,
       note: note,
+      status: status,
+      date: date,
     });
     const savedNote = await newNote.save();
     if (!savedNote)
@@ -37,6 +40,37 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/update", async (req, res) => {
+  const { id, status } = req.body;
+  // console.log("Received noteID:", id);
+  try {
+    const updatedNote = await Notes.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true } // Return the updated document
+    );
+    if (!updatedNote) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+    res.json(updatedNote);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.put("/seen", async (req, res) => {
+  const { id, seen } = req.body;
+  try {
+    const updatedNote = await Notes.findByIdAndUpdate(id, { seen });
+    if (!updatedNote) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+    res.json("updated");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 router.delete("/", async (req, res) => {
   // delete a  note
   try {
@@ -60,9 +94,8 @@ router.delete("/", async (req, res) => {
 router.delete("/all", async (req, res) => {
   // delete all notes of a user
   try {
-    const { userId } = req.query;
-    await Notes.deleteMany({ user_id: userId });
-
+    const { userId, status } = req.query;
+    await Notes.deleteMany({ user_id: userId, status: status });
     return res.status(200).json({ payload: "", message: "notes deleted" });
   } catch (error) {
     return res
@@ -71,4 +104,23 @@ router.delete("/all", async (req, res) => {
   }
 });
 
+router.patch("/", async (req, res) => {
+  try {
+    const { noteId } = req.query;
+    const { note } = req.body;
+    const response = await Notes.findOneAndUpdate(
+      { _id: noteId },
+      { $set: { note } }
+    );
+    if (!response)
+      return res
+        .status(500)
+        .json({ payload: "", message: "something went wrong" });
+    return res.status(200).json({ payload: "", message: "notes updated" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ payload: "", message: "something went wrong" });
+  }
+});
 module.exports = router;

@@ -7,6 +7,7 @@ const signinRoute = require("./routes/signin");
 const departmentsRoute = require("./routes/departments");
 const ticketRoute = require("./routes/ticket");
 const notesRoute = require("./routes/notes");
+const notificationRoute = require("./routes/notification");
 const clientRoute = require("./routes/clientNames"); // Replace with the actual path
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use("/api/departments", departmentsRoute);
 app.use("/api/tickets", ticketRoute);
 app.use("/api/notes", notesRoute);
 app.use("/api/client", clientRoute);
+app.use("/api/notification", notificationRoute);
 
 const port = 5000;
 app.listen(port, () => {

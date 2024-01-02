@@ -10,5 +10,17 @@ const NotesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: Boolean,
+    default: true,
+  },
+  date: {
+    type: String,
+    default: "",
+  },
+  seen: {
+    type: Boolean,
+    default: false,
+  },
 });
 module.exports = mongoose.model("note", NotesSchema);

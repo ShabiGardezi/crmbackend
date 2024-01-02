@@ -2,7 +2,8 @@ const router = require("express").Router();
 const { default: mongoose } = require("mongoose");
 const Ticket = require("../schemas/tickets");
 const Client = require("../schemas/clients");
-
+const Notifications = require("../schemas/notification");
+const User = require("../schemas/users");
 //API TO CREATE TICKET
 router.post("/", async (req, res) => {
   // create ticket
@@ -63,7 +64,9 @@ router.post("/", async (req, res) => {
   });
 
   const ticket = await newTicket.save();
-  return res.status(200).json({ payload: ticket, message: "ticket created" });
+  return res
+    .status(200)
+    .json({ payload: { _id: ticket._id }, message: "ticket created" });
 });
 
 router.post("/update_payment_history", async (req, res) => {
@@ -117,8 +120,40 @@ router.get("/", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-// Define a new route to get tickets with workStatus "Monthly SEO"
 
+// Define the route for getting tickets by department assignor and assignee for home notification
+router.get("/reportingdate-notification", async (req, res) => {
+  try {
+    const { userDepartmentId, salesDep } = req.query;
+    let flag = false;
+    if (salesDep === "true") flag = true;
+
+    const tickets = await Ticket.find({
+      $or: [
+        { majorAssignee: new mongoose.Types.ObjectId(userDepartmentId) },
+        { assignorDepartment: new mongoose.Types.ObjectId(userDepartmentId) },
+      ],
+      created_by_sales_department: flag,
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+
+    if (tickets && tickets.length > 0) {
+      return res
+        .status(200)
+        .json({ payload: tickets, message: "Tickets fetched" });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No tickets found for the specified department" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Define a new route to get tickets with workStatus "Monthly SEO"
 router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
   try {
     // const { salesDep } = req.query;
@@ -605,7 +640,7 @@ router.get("/active-nonactive-clients", async (req, res) => {
 // Create an API route to update notes for a specific ticket
 router.put("/notes-update", async (req, res) => {
   try {
-    const { ticketId, notes } = req.body;
+    const { ticketId, notes, departmentId, departmentName } = req.body;
 
     // Use Mongoose to find and update the specific ticket by its ID
     const updated = await Ticket.findByIdAndUpdate(
@@ -620,8 +655,67 @@ router.put("/notes-update", async (req, res) => {
       // If the ticket is not found, return an error
       return res.status(404).json({ message: "Ticket not found" });
     }
+    // Retrieve the user associated with the department
+    const user = await User.findOne({ department: departmentId });
+    const ticket = await Ticket.findById(ticketId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found for the department" });
+    }
+
+    const username = user.username;
+    if (departmentId === updated.majorAssignee.toString()) {
+      const newNotification = new Notifications({
+        ticket_Id: ticketId,
+        majorAssigneeId: updated.assignorDepartment,
+        assignorDepartment: departmentName,
+        assignorDepartmentId: departmentId,
+        forInBox: false,
+        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.clientName}`,
+      });
+      await newNotification.save();
+    } else if (departmentId === updated.assignorDepartment.toString()) {
+      const newNotification = new Notifications({
+        ticket_Id: ticketId,
+        majorAssigneeId: updated.majorAssignee,
+        assignorDepartment: departmentName,
+        assignorDepartmentId: updated.assignorDepartment,
+        forInBox: false,
+        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.clientName}`,
+      });
+      await newNotification.save();
+    }
 
     return res.status(200).json({ payload: updated, message: "Notes updated" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+// API to retrieve notes for a ticket
+router.get("/notes/:ticketId", async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+
+    // Find the ticket by its ID
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    const notes = ticket.businessdetails.notes;
+
+    if (!notes) {
+      return res
+        .status(404)
+        .json({ message: "Notes not available for this ticket" });
+    }
+
+    return res
+      .status(200)
+      .json({ payload: notes, message: "Notes retrieved successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -706,5 +800,4 @@ router.put("/likesfollowers-update", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 module.exports = router;
