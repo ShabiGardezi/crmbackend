@@ -90,6 +90,33 @@ router.post("/update_payment_history", async (req, res) => {
   }
 });
 
+// Define the route for getting all departments tickets
+router.get("/all-departments-ticket", async (req, res) => {
+  try {
+    const tickets = await Ticket.find({
+      assignorDepartment: new mongoose.Types.ObjectId(
+        "651b3409819ff0aec6af1387"
+      ),
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+
+    // Check if there are any tickets, and return them as a response
+    if (tickets && tickets.length > 0) {
+      return res
+        .status(200)
+        .json({ payload: tickets, message: "Tickets fetched" });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No tickets found for the specified department" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // Define the route for getting tickets by department
 router.get("/", async (req, res) => {
   try {
