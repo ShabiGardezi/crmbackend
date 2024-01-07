@@ -3,6 +3,7 @@ const { default: mongoose } = require("mongoose");
 const Ticket = require("../schemas/tickets");
 const Client = require("../schemas/clients");
 const Notifications = require("../schemas/notification");
+const User = require("../schemas/users");
 //API TO CREATE TICKET
 router.post("/", async (req, res) => {
   // create ticket
@@ -653,6 +654,37 @@ router.put("/notes-update", async (req, res) => {
     if (!updated) {
       // If the ticket is not found, return an error
       return res.status(404).json({ message: "Ticket not found" });
+    }
+    // Retrieve the user associated with the department
+    const user = await User.findOne({ department: departmentId });
+    const ticket = await Ticket.findById(ticketId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found for the department" });
+    }
+
+    const username = user.username;
+    if (departmentId === updated.majorAssignee.toString()) {
+      const newNotification = new Notifications({
+        ticket_Id: ticketId,
+        majorAssigneeId: updated.assignorDepartment,
+        assignorDepartment: departmentName,
+        assignorDepartmentId: departmentId,
+        forInBox: false,
+        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.clientName}`,
+      });
+      await newNotification.save();
+    } else if (departmentId === updated.assignorDepartment.toString()) {
+      const newNotification = new Notifications({
+        ticket_Id: ticketId,
+        majorAssigneeId: updated.majorAssignee,
+        assignorDepartment: departmentName,
+        assignorDepartmentId: updated.assignorDepartment,
+        forInBox: false,
+        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.clientName}`,
+      });
+      await newNotification.save();
     }
 
     if (departmentId === updated.majorAssignee.toString()) {

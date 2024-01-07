@@ -20,7 +20,7 @@ const NotesSchema = new mongoose.Schema({
   },
   seen: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 module.exports = mongoose.model("note", NotesSchema);

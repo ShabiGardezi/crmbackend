@@ -116,4 +116,25 @@ router.put("/reportingdate", async (req, res) => {
       .json({ payload: "", message: "something went wrong" });
   }
 });
+// Add this route in your notifications routes
+router.delete("/:notificationId", async (req, res) => {
+  try {
+    const { notificationId } = req.params;
+    const deletedNotification = await Notifications.findByIdAndDelete(
+      notificationId
+    );
+
+    if (!deletedNotification) {
+      return res.status(404).json({ error: "Notification not found" });
+    }
+
+    res.json({
+      message: "Notification deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting notification", error);
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 module.exports = router;

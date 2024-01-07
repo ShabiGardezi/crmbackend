@@ -8,8 +8,7 @@ const departmentsRoute = require("./routes/departments");
 const ticketRoute = require("./routes/ticket");
 const notesRoute = require("./routes/notes");
 const notificationRoute = require("./routes/notification");
-const clientRoute = require("./routes/clientNames"); // Replace with the actual path
-
+const clientRoute = require("./routes/clientNames");
 dotenv.config();
 mongoose
   .connect("mongodb+srv://rankbpo:rankbpo123@crmrankbpo.ae4ccof.mongodb.net/", {
@@ -27,7 +26,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*", // Allow requests from this origin
-    methods: "GET, POST, PUT, DELETE", // Allowed HTTP methods
+    methods: "GET, POST, PUT, PATCH, DELETE", // Allowed HTTP methods
   })
 );
 
