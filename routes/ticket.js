@@ -795,6 +795,27 @@ router.put("/remaining-update", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+router.get("/remaining/:ticketId", async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+
+    // Use Mongoose to find the specific ticket by its ID
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      // If the ticket is not found, return an error
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    // Return the remaining price from the ticket object
+    const remainingPrice = ticket.quotation.remainingPrice;
+    return res.status(200).json({ remainingPrice });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // Create an API route to update keywords for a specific ticket
 router.put("/keywords-update", async (req, res) => {
   try {
