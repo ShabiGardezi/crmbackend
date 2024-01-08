@@ -26,7 +26,7 @@
       "businessHours": "",
       "socialProfile": "",
       "gmbUrl": "",
-      "workStatus": "",
+      "work_status": "",
       "notes": ""
     }
   },
@@ -86,7 +86,7 @@
       "businessHours": "",
       "socialProfile": "",
       "gmbUrl": "",
-      "workStatus": "",
+      "work_status": "",
       "notes": "",
       "monthlyBlogsRequirement": "",
       "LoginCredentials": "",
@@ -193,10 +193,10 @@
       "Keywords": "",
       "WebsiteURL": "",
       "clientEmail": "",
-      "workStatusWordpress": "",
-      "workStatusLocalSeo": "",
-      "workStatusReviews": "",
-      "workStatusWebSeo": "",
+      "work_statusWordpress": "",
+      "work_statusLocalSeo": "",
+      "work_statusReviews": "",
+      "work_statusWebSeo": "",
       "notes": "",
       "ReferralWebsite": "",
       "departmentName": ""

@@ -34,7 +34,7 @@ const ClientSchema = new mongoose.Schema({
   gmbUrl: {
     type: String,
   },
-  workStatus: {
+  work_status: {
     type: String,
   },
   WebsiteURL: {

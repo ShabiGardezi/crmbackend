@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
       zipcode: businessdetails.zipcode,
       socialProfile: businessdetails.socialProfile,
       gmbUrl: businessdetails.gmbUrl,
-      workStatus: businessdetails.workStatus,
+      work_status: businessdetails.work_status,
       WebsiteURL: businessdetails.WebsiteURL,
       ReferralWebsite: businessdetails.ReferralWebsite,
       noOfFbreviews: businessdetails.noOfFbreviews,
@@ -84,6 +84,33 @@ router.post("/update_payment_history", async (req, res) => {
     return res
       .status(200)
       .json({ payload: updated, message: "payment history updated" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Define the route for getting all departments tickets
+router.get("/all-departments-ticket", async (req, res) => {
+  try {
+    const tickets = await Ticket.find({
+      assignorDepartment: new mongoose.Types.ObjectId(
+        "651b3409819ff0aec6af1387"
+      ),
+    })
+      .populate("majorAssignee", "name")
+      .populate("assignorDepartment", "name");
+
+    // Check if there are any tickets, and return them as a response
+    if (tickets && tickets.length > 0) {
+      return res
+        .status(200)
+        .json({ payload: tickets, message: "Tickets fetched" });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No tickets found for the specified department" });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -153,16 +180,16 @@ router.get("/reportingdate-notification", async (req, res) => {
   }
 });
 
-// Define a new route to get tickets with workStatus "Monthly SEO"
+// Define a new route to get tickets with work_status "Monthly SEO"
 router.get("/tickets-except-monthly-seo/:majorAssignee", async (req, res) => {
   try {
     // const { salesDep } = req.query;
     // let flag = false;
     // if (salesDep === "true") flag = true;
 
-    // Query the database to find tickets with workStatus other than "Monthly-SEO" and assigned to the specified majorAssignee
+    // Query the database to find tickets with work_status other than "Monthly-SEO" and assigned to the specified majorAssignee
     const ticketsExceptMonthlySeo = await Ticket.find({
-      "businessdetails.workStatus": { $ne: "Monthly-SEO" },
+      "businessdetails.work_status": { $ne: "Monthly-SEO" },
       majorAssignee: "65195c8f504d80e8f11b0d15",
       created_by_sales_department: true,
     });
@@ -193,9 +220,9 @@ router.get(
       const { salesDep } = req.query;
       let flag = false;
       if (salesDep === "true") flag = true;
-      // Query the database to find the count of tickets with workStatus other than "Monthly-SEO" and assigned to the specified majorAssignee
+      // Query the database to find the count of tickets with work_status other than "Monthly-SEO" and assigned to the specified majorAssignee
       const countOfTicketsExceptMonthlySeo = await Ticket.countDocuments({
-        "businessdetails.workStatus": { $ne: "Monthly-SEO" },
+        "businessdetails.work_status": { $ne: "Monthly-SEO" },
         majorAssignee: "65195c8f504d80e8f11b0d15",
         created_by_sales_department: true,
       });
@@ -215,12 +242,12 @@ router.get(
   }
 );
 
-// Define a route to count tickets with workStatus 'Monthly-SEO'
+// Define a route to count tickets with work_status 'Monthly-SEO'
 router.get("/tickets-count-monthly-seo", async (req, res) => {
   try {
-    // Query the database to find the count of tickets with workStatus "Monthly-SEO"
+    // Query the database to find the count of tickets with work_status "Monthly-SEO"
     const countOfMonthlySeoTickets = await Ticket.countDocuments({
-      "businessdetails.workStatus": "Monthly-SEO",
+      "businessdetails.work_status": "Monthly-SEO",
       created_by_sales_department: true,
     });
 
@@ -237,12 +264,12 @@ router.get("/tickets-count-monthly-seo", async (req, res) => {
   }
 });
 
-// Define a route to get tickets with workStatus Monthly-SEO
+// Define a route to get tickets with work_status Monthly-SEO
 router.get("/monthly-seo-tickets", async (req, res) => {
   try {
-    // Query the database to find tickets with workStatus "Monthly-SEO"
+    // Query the database to find tickets with work_status "Monthly-SEO"
     const monthlySeoTickets = await Ticket.find({
-      "businessdetails.workStatus": "Monthly-SEO",
+      "businessdetails.work_status": "Monthly-SEO",
       created_by_sales_department: true,
     });
 
@@ -250,11 +277,11 @@ router.get("/monthly-seo-tickets", async (req, res) => {
     if (monthlySeoTickets && monthlySeoTickets.length > 0) {
       return res.status(200).json({
         payload: monthlySeoTickets,
-        message: "Tickets with workStatus Monthly-SEO fetched",
+        message: "Tickets with work_status Monthly-SEO fetched",
       });
     } else {
       return res.status(404).json({
-        message: "No tickets with workStatus Monthly-SEO found",
+        message: "No tickets with work_status Monthly-SEO found",
       });
     }
   } catch (error) {
