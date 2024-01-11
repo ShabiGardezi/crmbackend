@@ -4,6 +4,7 @@ const Ticket = require("../schemas/tickets");
 const Client = require("../schemas/clients");
 const Notifications = require("../schemas/notification");
 const User = require("../schemas/users");
+const departments = require("../schemas/departments");
 //API TO CREATE TICKET
 router.post("/", async (req, res) => {
   // create ticket
@@ -87,6 +88,55 @@ router.post("/update_payment_history", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
+  }
+});
+router.put("/update_payment/:ticketId/:paymentIndex", async (req, res) => {
+  try {
+    const { ticketId, paymentIndex } = req.params;
+    const { payment } = req.body;
+
+    const updatedTicket = await Ticket.findById(ticketId);
+
+    if (!updatedTicket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    const paymentHistory = updatedTicket.payment_history;
+
+    if (paymentIndex < 0 || paymentIndex >= paymentHistory.length) {
+      return res.status(400).json({ message: "Invalid payment index" });
+    }
+
+    paymentHistory[paymentIndex].payment = parseFloat(payment);
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      { payment_history: paymentHistory },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ payload: updated, message: "Payment updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+// API endpoint to get users by department
+router.get("/users/:departmentId", async (req, res) => {
+  try {
+    const departmentId = req.params.departmentId;
+    const users = await User.find({ department: departmentId });
+
+    const formattedUsers = users.map((user) => ({
+      _id: user._id,
+      username: user.username,
+    }));
+
+    res.json(formattedUsers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -564,7 +614,6 @@ router.get("/:ticketId", async (req, res) => {
     const ticket = await Ticket.findById(ticketId)
       .populate("assignorDepartment", "name")
       .populate("majorAssignee", "name");
-
     // Check if the ticket exists and return it as a response
     if (ticket) {
       return res
