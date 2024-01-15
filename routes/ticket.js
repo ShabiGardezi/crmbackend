@@ -122,6 +122,32 @@ router.put("/update_payment/:ticketId/:paymentIndex", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+// API endpoint to update the price of a ticket
+router.put("/:ticketId/update-price", async (req, res) => {
+  const { ticketId } = req.params;
+  const { newPrice } = req.body;
+  try {
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        $set: { "quotation.price": newPrice },
+      },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: "Ticket not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Ticket price updated successfully", ticket: updated });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // API endpoint to get users by department
 router.get("/users/:departmentId", async (req, res) => {
   try {
