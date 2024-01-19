@@ -72,12 +72,16 @@ router.post("/", async (req, res) => {
 
 router.post("/update_payment_history", async (req, res) => {
   try {
-    const { payment, ticketId } = req.body;
+    const { payment, ticketId, selectedUser } = req.body;
     const updated = await Ticket.findByIdAndUpdate(
       ticketId,
       {
         $push: {
-          payment_history: { date: new Date(), payment: parseFloat(payment) },
+          payment_history: {
+            date: new Date(),
+            payment: parseFloat(payment),
+            closer: selectedUser,
+          },
         },
       },
       { new: true }
@@ -90,6 +94,25 @@ router.post("/update_payment_history", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+router.get("/get_payment_history/:ticketId", async (req, res) => {
+  try {
+    const ticketId = req.params.ticketId;
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    return res.status(200).json({
+      payload: ticket.payment_history,
+      message: "Payment history retrieved",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.put("/update_payment/:ticketId/:paymentIndex", async (req, res) => {
   try {
     const { ticketId, paymentIndex } = req.params;
