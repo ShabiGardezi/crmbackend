@@ -56,7 +56,7 @@ router.post("/", async (req, res) => {
       assignorDepartmentId,
       majorAssigneeId,
       dueDate,
-      clientName,
+      businessName,
       ticketId,
     } = req.body;
 
@@ -80,7 +80,7 @@ router.post("/", async (req, res) => {
       assignorDepartmentId: assignorDepartmentId,
       dueDate: dueDate,
       majorAssigneeId: majorAssigneeId,
-      client_name: clientName,
+      business_name: businessName,
       notes: notes,
     });
 

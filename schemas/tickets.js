@@ -49,6 +49,11 @@ const TicketSchema = new mongoose.Schema({
     default: false,
   },
 
+  serialNumber: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   businessdetails: {},
   Services: {},
   quotation: {},

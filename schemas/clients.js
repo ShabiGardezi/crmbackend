@@ -7,7 +7,7 @@ const ClientSchema = new mongoose.Schema({
   businessNumber: {
     type: String,
   },
-  clientName: {
+  businessName: {
     type: String,
   },
   clientEmail: {

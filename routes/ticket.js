@@ -26,15 +26,23 @@ router.post("/", async (req, res) => {
   if (assignorDepartment === "651b3409819ff0aec6af1387") {
     created_by_sales_department = true;
   }
+  // Generate unique serial number
+  const lastTicket = await Ticket.findOne({}, {}, { sort: { createdAt: -1 } });
+  let serialNumber = "ROB-0001"; // Default starting serial number
+  if (lastTicket && lastTicket.serialNumber) {
+    const lastSerialNumber = lastTicket.serialNumber.split("-")[1];
+    const nextSerialNumber = parseInt(lastSerialNumber, 10) + 1;
+    serialNumber = `ROB-${nextSerialNumber.toString().padStart(4, "0")}`;
+  }
   const client = await Client.findOne({
-    clientName: businessdetails.clientName,
+    businessName: businessdetails.businessName,
   });
   if (!client) {
     // create a new client
     const newClient = new Client({
       businessHours: businessdetails.businessHours,
       businessNumber: businessdetails.businessNumber,
-      clientName: businessdetails.clientName,
+      businessName: businessdetails.businessName,
       clientEmail: businessdetails.clientEmail,
       state: businessdetails.state,
       facebookURL: businessdetails.facebookURL,
@@ -52,6 +60,7 @@ router.post("/", async (req, res) => {
   }
 
   const newTicket = new Ticket({
+    serialNumber,
     created_by,
     majorAssignee,
     dueDate,
@@ -63,7 +72,6 @@ router.post("/", async (req, res) => {
     created_by_sales_department,
     payment_history: [{ date: new Date(), payment: payment_history }],
   });
-
   const ticket = await newTicket.save();
   return res
     .status(200)
@@ -598,7 +606,7 @@ router.get("/client-search", async (req, res) => {
     const { searchString } = req.query;
 
     const respone = await Ticket.find({
-      "businessdetails.clientName": { $regex: searchString, $options: "i" },
+      "businessdetails.businessName": { $regex: searchString, $options: "i" },
     })
 
       .populate("majorAssignee", "name")
@@ -772,7 +780,7 @@ router.put("/notes-update", async (req, res) => {
         assignorDepartment: departmentName,
         assignorDepartmentId: departmentId,
         forInBox: false,
-        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.clientName}`,
+        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.businessName}`,
       });
       await newNotification.save();
     } else if (departmentId === updated.assignorDepartment.toString()) {
@@ -782,7 +790,7 @@ router.put("/notes-update", async (req, res) => {
         assignorDepartment: departmentName,
         assignorDepartmentId: updated.assignorDepartment,
         forInBox: false,
-        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.clientName}`,
+        message: `${username} has edited the notes for Business Name: ${ticket.businessdetails.businessName}`,
       });
       await newNotification.save();
     }

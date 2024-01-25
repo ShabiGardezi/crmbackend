@@ -8,8 +8,8 @@ router.get("/suggestions", async (req, res) => {
   try {
     // Use a regular expression to find client names starting with the query
     const suggestions = await Client.find({
-      clientName: { $regex: `^${query}`, $options: "i" }, // 'i' for case-insensitive matching
-    }).select("clientName");
+      businessName: { $regex: `^${query}`, $options: "i" }, // 'i' for case-insensitive matching
+    }).select("businessName");
 
     res.json(suggestions);
   } catch (error) {
@@ -19,11 +19,11 @@ router.get("/suggestions", async (req, res) => {
   }
 });
 
-router.get("/details/:clientName", async (req, res) => {
-  const { clientName } = req.params;
+router.get("/details/:businessName", async (req, res) => {
+  const { businessName } = req.params;
 
   try {
-    const client = await Client.findOne({ clientName });
+    const client = await Client.findOne({ businessName });
 
     if (!client) {
       return res.status(404).json({ error: "Client not found." });
