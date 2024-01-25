@@ -12,10 +12,15 @@ const NotificationSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  client_name: {
+  business_name: {
     type: String,
     default: "",
     required: false,
+  },
+  serialNumber: {
+    type: String,
+    required: true,
+    unique: true,
   },
   dueDate: {
     type: String,

@@ -71,7 +71,9 @@ router.post("/", async (req, res) => {
       ticket && ticket.businessdetails && ticket.businessdetails.notes
         ? ticket.businessdetails.notes
         : null;
+    const serialNumber = ticket.serialNumber;
     const newNotification = new Notifications({
+      serialNumber: serialNumber,
       ticket_Id: ticketId,
       user_Id: userId,
       user_name: userName,
