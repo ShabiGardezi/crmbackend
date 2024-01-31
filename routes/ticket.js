@@ -18,6 +18,7 @@ router.post("/", async (req, res) => {
     quotation,
     TicketDetails,
     payment_history,
+    clientReporting,
   } = req.body;
 
   if (!created_by || !majorAssignee || !dueDate || !assignorDepartment)
@@ -71,6 +72,7 @@ router.post("/", async (req, res) => {
     assignorDepartment,
     created_by_sales_department,
     payment_history: [{ date: new Date(), payment: payment_history }],
+    clientReporting: [{ clientReporting: clientReporting }],
   });
   const ticket = await newTicket.save();
   return res
@@ -102,6 +104,29 @@ router.post("/update_payment_history", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+router.post("/update_report_history", async (req, res) => {
+  try {
+    const { reportDate, ticketId } = req.body;
+
+    const updated = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        $push: {
+          clientReporting: {
+            clientReporting: reportDate,
+          },
+        },
+      },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .json({ payload: updated, message: "report date history updated" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 router.get("/get_payment_history/:ticketId", async (req, res) => {
   try {
     const ticketId = req.params.ticketId;
@@ -120,7 +145,6 @@ router.get("/get_payment_history/:ticketId", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 router.put("/update_payment/:ticketId/:paymentIndex", async (req, res) => {
   try {
     const { ticketId, paymentIndex } = req.params;
@@ -153,6 +177,42 @@ router.put("/update_payment/:ticketId/:paymentIndex", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+router.put(
+  "/update_client_reporting/:ticketId/:reportIndex",
+  async (req, res) => {
+    try {
+      const { ticketId, reportIndex } = req.params;
+      const { clientReporting } = req.body;
+
+      const updatedTicket = await Ticket.findById(ticketId);
+
+      if (!updatedTicket) {
+        return res.status(404).json({ message: "Ticket not found" });
+      }
+
+      const clientReportHistory = updatedTicket.clientReporting;
+
+      if (reportIndex < 0 || reportIndex >= clientReportHistory.length) {
+        return res.status(400).json({ message: "Invalid report index" });
+      }
+
+      clientReportHistory[reportIndex].clientReporting = clientReporting;
+      const updated = await Ticket.findByIdAndUpdate(
+        ticketId,
+        { clientReporting: clientReportHistory },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        payload: updated,
+        message: "Client reporting updated successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
 
 // API endpoint to get users by department
 router.get("/users/:departmentId", async (req, res) => {
@@ -765,6 +825,7 @@ router.put("/notes-update", async (req, res) => {
     }
     // Retrieve the user associated with the department
     const user = await User.findOne({ department: departmentId });
+    const username = user ? user.username : "Unknown User";
     const ticket = await Ticket.findById(ticketId);
     if (!user) {
       return res
@@ -772,9 +833,10 @@ router.put("/notes-update", async (req, res) => {
         .json({ message: "User not found for the department" });
     }
 
-    const username = user.username;
+    const serialNumber = ticket.serialNumber;
     if (departmentId === updated.majorAssignee.toString()) {
       const newNotification = new Notifications({
+        serialNumber: serialNumber,
         ticket_Id: ticketId,
         majorAssigneeId: updated.assignorDepartment,
         assignorDepartment: departmentName,
@@ -785,6 +847,7 @@ router.put("/notes-update", async (req, res) => {
       await newNotification.save();
     } else if (departmentId === updated.assignorDepartment.toString()) {
       const newNotification = new Notifications({
+        serialNumber: serialNumber,
         ticket_Id: ticketId,
         majorAssigneeId: updated.majorAssignee,
         assignorDepartment: departmentName,
@@ -794,9 +857,9 @@ router.put("/notes-update", async (req, res) => {
       });
       await newNotification.save();
     }
-
     if (departmentId === updated.majorAssignee.toString()) {
       const newNotification = new Notifications({
+        serialNumber: serialNumber,
         ticket_Id: ticketId,
         majorAssigneeId: updated.assignorDepartment,
         assignorDepartment: departmentName,
@@ -807,6 +870,7 @@ router.put("/notes-update", async (req, res) => {
       await newNotification.save();
     } else if (departmentId === updated.assignorDepartment.toString()) {
       const newNotification = new Notifications({
+        serialNumber: serialNumber,
         ticket_Id: ticketId,
         majorAssigneeId: updated.majorAssignee,
         assignorDepartment: departmentName,

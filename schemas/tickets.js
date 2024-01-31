@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const Client = require("../schemas/clients");
 const TicketSchema = new mongoose.Schema({
   created_by: {
     type: mongoose.Types.ObjectId,
@@ -48,7 +48,6 @@ const TicketSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
-
   serialNumber: {
     type: String,
     required: true,
@@ -59,5 +58,6 @@ const TicketSchema = new mongoose.Schema({
   quotation: {},
   TicketDetails: {},
   payment_history: [],
+  clientReporting: [],
 });
 module.exports = mongoose.model("ticket", TicketSchema);
