@@ -11,9 +11,12 @@ const notificationRoute = require("./routes/notification");
 const clientRoute = require("./routes/clientNames");
 dotenv.config();
 mongoose
-  .connect("mongodb+srv://rankbpo:rankbpo123@crmrankbpo.ae4ccof.mongodb.net/", {
-    dbName: "CRM", // Specify the database name here
-  })
+  .connect(
+    "mongodb+srv://crmrankbpo:8PQnqzqTnGeXnSAX@crmrankorbit.gq2hhuc.mongodb.net",
+    {
+      dbName: "CRM", // Specify the database name here
+    }
+  )
   .then(() => console.log("DB connection success"))
   .catch((err) => {
     console.log(err);

@@ -1,8 +1,5 @@
 const router = require("express").Router();
 const User = require("../schemas/users");
-router.get("/usertest", (req, res) => {
-  res.send("user test");
-});
 
 // const checkRole = (req, res, next) => {
 //   const userRole = req.session.User.role; // Assuming you store the user's role in the session
@@ -48,9 +45,19 @@ router.post("/signup", async (req, res) => {
       role: req.body.role,
       department: req.body.department,
     });
-
     const savedUser = await newUser.save();
-    res.status(201).json({ message: "Signup successful", payload: savedUser });
+
+    const sanitizedUser = {
+      _id: savedUser._id,
+      username: savedUser.username,
+      email: savedUser.email,
+      role: savedUser.role,
+      department: savedUser.department,
+      __v: savedUser.__v,
+    };
+    res
+      .status(201)
+      .json({ message: "Signup successful", payload: sanitizedUser });
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
