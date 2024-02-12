@@ -1,5 +1,43 @@
 const mongoose = require("mongoose");
 const Client = require("../schemas/clients");
+
+const PaymentHistorySchema = new mongoose.Schema({
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  payment: {
+    type: Number,
+    required: true,
+  },
+  fronter: {
+    type: String,
+    required: true,
+  },
+  closer: {
+    type: String,
+    required: true,
+  },
+});
+
+const RemainingPriceSnapshotSchema = new mongoose.Schema({
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  remainingPrice: {
+    type: Number,
+    required: true,
+  },
+  fronter: {
+    type: String,
+    required: true,
+  },
+  closer: {
+    type: String,
+    required: true,
+  },
+});
 const TicketSchema = new mongoose.Schema({
   created_by: {
     type: mongoose.Types.ObjectId,
@@ -57,7 +95,8 @@ const TicketSchema = new mongoose.Schema({
   Services: {},
   quotation: {},
   TicketDetails: {},
-  payment_history: [],
+  payment_history: [PaymentHistorySchema],
+  remaining_price_history: [RemainingPriceSnapshotSchema], // New field to track remaining price history
   clientReporting: [],
 });
 module.exports = mongoose.model("ticket", TicketSchema);

@@ -59,7 +59,14 @@ router.post("/", async (req, res) => {
     });
     await newClient.save();
   }
-
+  const remaining_price_history = [
+    {
+      date: new Date(),
+      remainingPrice: quotation.remainingPrice,
+      fronter: businessdetails.fronter, // Include fronter name
+      closer: businessdetails.closer, // Include closer name
+    },
+  ];
   const newTicket = new Ticket({
     serialNumber,
     created_by,
@@ -71,7 +78,17 @@ router.post("/", async (req, res) => {
     TicketDetails,
     assignorDepartment,
     created_by_sales_department,
-    payment_history: [{ date: new Date(), payment: payment_history }],
+    payment_history: [
+      {
+        date: new Date(),
+        payment: payment_history,
+        fronter: businessdetails.fronter, // Include fronter name
+        closer: businessdetails.closer, // Include closer name
+        remainingPrice: quotation.remainingPrice, // Include remaining price
+      },
+    ],
+    remaining_price_history, // Include remaining price history
+
     clientReporting: [{ clientReporting: clientReporting }],
   });
   const ticket = await newTicket.save();
@@ -79,6 +96,63 @@ router.post("/", async (req, res) => {
     .status(200)
     .json({ payload: { _id: ticket._id }, message: "ticket created" });
 });
+router.post("/update_remaining_price", async (req, res) => {
+  try {
+    const { remainingPrice, ticketId, paymentHistoryId } = req.body;
+
+    // Find the ticket by its ID
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Ticket not found" });
+    }
+
+    // Find the payment history entry by its ID
+    const paymentHistory = ticket.payment_history.find(
+      (payment) => payment._id.toString() === paymentHistoryId
+    );
+
+    if (!paymentHistory) {
+      return res.status(404).json({ message: "Payment history not found" });
+    }
+
+    // Calculate the previous remaining price
+    const previousRemainingPrice =
+      ticket.remaining_price_history[
+        ticket.remaining_price_history.length - 1
+      ]?.remainingPrice || 0;
+
+    // Calculate the payment received based on the difference between the previous remaining price and the current one
+    const paymentReceived = previousRemainingPrice - parseFloat(remainingPrice);
+
+    // Push the remaining price entry in the remaining price history array
+    ticket.remaining_price_history.push({
+      date: new Date(),
+      remainingPrice: parseFloat(remainingPrice),
+      fronter: paymentHistory.fronter,
+      closer: paymentHistory.closer,
+    });
+
+    // Push the actual payment received in the payment history array
+    ticket.payment_history.push({
+      date: new Date(),
+      payment: paymentReceived,
+      fronter: paymentHistory.fronter,
+      closer: paymentHistory.closer,
+    });
+
+    // Save the updated ticket
+    const updatedTicket = await ticket.save();
+
+    return res
+      .status(200)
+      .json({ payload: updatedTicket, message: "Remaining price updated" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 router.post("/update_payment_history", async (req, res) => {
   try {
@@ -952,8 +1026,12 @@ router.get("/remaining/:ticketId", async (req, res) => {
       return res.status(404).json({ message: "Ticket not found" });
     }
 
-    // Return the remaining price from the ticket object
-    const remainingPrice = ticket.quotation.remainingPrice;
+    // Calculate remaining price based on payment history
+    const remainingPrice = ticket.payment_history.reduce((total, payment) => {
+      return total + payment.remainingPrice;
+    }, 0);
+
+    // Return the calculated remaining price
     return res.status(200).json({ remainingPrice });
   } catch (error) {
     console.error(error);
